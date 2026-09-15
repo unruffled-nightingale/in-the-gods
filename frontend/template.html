@@ -36,6 +36,9 @@
     --claret:#6E2431;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  /* A title long enough to overflow makes the page pannable sideways, and the
+     fixed splash then centres against that wider box instead of the screen. */
+  html,body{overflow-x:hidden}
   html{-webkit-text-size-adjust:100%}
   ::selection{background:var(--ink);color:var(--paper)}
   body{
@@ -200,6 +203,7 @@
     font-size:clamp(32px,8vw,46px);
     line-height:1.0; letter-spacing:.022em;
     margin:0 0 16px; max-width:19ch;
+    overflow-wrap:break-word;
   }
   h2 a{color:var(--claret);text-decoration:none;transition:color .2s}
   h2 a:hover{color:var(--ink)}
@@ -250,9 +254,32 @@
   }
 
   @media (max-width:600px){
-    body{padding:20px 18px 70px}
+    body{font-size:18px; padding:20px 18px 96px 22px}
     .slot{padding:32px 0 28px}
     h2{max-width:none}
+
+    .caps{font-size:11px}
+    .ask input{font-size:18px; padding:16px 0 10px}
+    .ask button{font-size:11px; padding:16px 0 10px 18px}
+    .reading{font-size:17px}
+    .byline{font-size:15px}
+    .blurb{font-size:16px}
+    .blurb.none{font-size:11px}
+    .why{font-size:15.5px}
+    .range-labels{font-size:15px}
+    .chip{font-size:11px; padding:10px 14px}
+    .reset{font-size:11px}
+    .empty{font-size:20px}
+
+    /* thumb-sized targets; negative margins keep the icons flush with the
+       text column despite the padding */
+    .bar{padding:20px 0 14px}
+    .bar .grp{gap:8px; margin-right:-7px}
+    .tog{padding:7px}
+    .tog svg{width:24px;height:24px}
+    .acts{gap:10px; margin-left:-9px}
+    .act{padding:9px}
+    .act svg{width:20px;height:20px}
   }
   /* ---------- splash ---------- */
   .splash{
@@ -279,6 +306,11 @@
   .splash.out{
     opacity:0; pointer-events:none;
     transition:opacity .35s linear;
+  }
+
+  @media (max-width:600px){
+    /* fixed, not 8vw: a vw-sized title re-centres on any viewport change */
+    .splash h1{font-size:34px}
   }
 
   @media (prefers-reduced-motion:reduce){
