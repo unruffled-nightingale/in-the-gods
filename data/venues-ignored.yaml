@@ -1,0 +1,91 @@
+# Venues researched but not crawled — gone, blocked, or not a house.
+
+ignored_venues:
+- id: artsadmin
+  reason: What's-on hub has no performance cards even after render
+- id: tara-theatre
+  reason: "Nuxt app never hydrates, even in Chromium"
+- id: streatham-space
+  reason: Site expired (Squarespace 404)
+- id: clf-art-cafe
+  reason: Domain detached from its Wix site
+- id: theatre-peckham
+  reason: "Line-up widget; Chromium loads the chrome, not the listings"
+- id: gate-theatre
+  reason: Itinerant since 2022; no venue listing
+- id: bernie-grant
+  reason: TicketSource Cloudflare interstitial even in Chromium
+- id: wac-arts
+  reason: "Classes and courses, not a performance programme"
+- id: old-red-lion
+  reason: Rebranded site lists titles with no dates on the listing or show pages
+- id: rosemary-branch
+  reason: Webflow; /whats-on 404s and homepage empty after render
+- id: lion-and-unicorn
+  reason: What's On is a programming call, not a dated listing
+- id: pentameters
+  reason: Theatre is dark (dispute with Urban Pubs and Bars)
+- id: well-walk
+  reason: Wix events list with no dates after render
+- id: bread-and-roses
+  reason: No performance listing to scrape
+- id: arches-lane
+  reason: Wix members login wall
+- id: colour-house
+  reason: Domain for sale; no theatre site
+- id: blue-elephant
+  reason: Building surrendered Dec 2024; /whatson has no dated programme
+- id: lowmac
+  reason: Domain no longer resolves
+- id: calder
+  reason: No performance listing to scrape
+- id: omnibus-south
+  reason: Domain no longer resolves
+- id: rose-and-crown
+  reason: Domain detached from its Wix site
+- id: theatre-deli
+  reason: "What's-on and /events are classes, drop-ins and studio hire, no shows"
+- id: vortex
+  reason: No performance listing to scrape
+- id: applecart-arts
+  reason: Domain no longer serves (connection timeout)
+- id: space-arts-brady
+  reason: No performance listing to scrape
+- id: darkfield
+  reason: Not a venue (touring company)
+- id: bridge-command
+  reason: "Wrong domain (ship simulator, not the theatre company)"
+- id: nunkie
+  reason: Not a venue (touring company)
+- id: charles-court-opera
+  reason: Not a venue (company)
+- id: ockhams-razor
+  reason: Not a venue (company)
+- id: gecko
+  reason: Not a venue (company)
+- id: zu-uk
+  reason: Not a venue (company)
+- id: mimelondon
+  reason: "Festival archive 2017–18, not a current programme"
+- id: london-lovecraft
+  reason: No performance listing to scrape
+- id: gdif
+  reason: "Festival portfolio of past commissions, not a listing"
+- id: lift
+  reason: "Biennial festival, not a weekly venue"
+- id: suspense
+  reason: Site down (LiteSpeed 404)
+- id: grimeborn
+  reason: "Festival on Arcola's programme, not its own venue"
+- id: spill
+  reason: "Festival, not a venue"
+- id: voila-europe
+  reason: "Festival, not a venue"
+- id: ambika-p3
+  reason: p3exhibitions.com has been hijacked (unrelated spam site)
+- id: poplar-union
+  reason: Events list is community classes, not a performance programme
+- id: royal-albert-hall
+  reason: Bot wall ("Pardon Our Interruption") even in Chromium
+- id: the-vaults
+  reason: Wix; listings are two ticket-banner images with no dated cards

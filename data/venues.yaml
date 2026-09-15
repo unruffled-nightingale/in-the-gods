@@ -1,0 +1,1407 @@
+# Working venues. If it is in this file, we crawl it.
+# Houses we are not crawling live in venues-ignored.yaml.
+
+venues:
+- id: almeida
+  name: Almeida Theatre
+  location:
+    area: Islington
+  whats_on_url: "https://almeida.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: ".c-event-card__daterange"
+    link: a.c-event-card__permalink
+- id: young-vic
+  name: Young Vic
+  location:
+    area: South Bank
+  whats_on_url: "https://www.youngvic.org/whats-on/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".c-event-card"
+  lookahead_weeks: 12
+  selectors:
+    show_card: ".c-event-card, .c-billboard"
+    title: "h3.c-event-card__title, h2.c-heading"
+    dates: ".c-event-card__time, .c-paragraph"
+    space: ".c-event-card__event-venue"
+    link: "a.c-event-card__cover-link, a.c-btn--primary"
+  notes: >
+    Cloudflare on the show pages was returning empty copy. Rendering the listing and the
+    hops through Chromium is the same path as the JS-only houses. Festival promos sit in
+    `.c-billboard` rather than event cards (Shedinburgh). 12-week lookahead keeps the
+    rest of the autumn season (Eurotrash opens mid-November).
+- id: donmar
+  name: Donmar Warehouse
+  location:
+    area: Covent Garden
+  whats_on_url: "https://www.donmarwarehouse.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-media--event"
+    title: ".c-media__title"
+    dates: ".c-media__datetime"
+    credits: ".c-media__posttitle"
+    blurb: ".c-media__summary"
+- id: royal-court
+  name: Royal Court
+  location:
+    area: Sloane Square
+  whats_on_url: "https://royalcourttheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-media--event"
+    title: ".c-media__title"
+    dates: ".c-media__datetime"
+    credits: ".c-media__posttitle"
+    blurb: ".c-media__summary"
+- id: bush
+  name: Bush Theatre
+  location:
+    area: "Shepherd's Bush"
+  whats_on_url: "https://www.bushtheatre.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".events_item"
+    title: h3
+    dates: ".events_item__meta p:nth-of-type(2)"
+    space: ".events_item__meta p:nth-of-type(3)"
+    credits: ".events_item__meta p.bold"
+    link: a.events_item__link
+- id: hampstead
+  name: Hampstead Theatre
+  location:
+    area: Swiss Cottage
+  whats_on_url: "https://www.hampsteadtheatre.com/whats-on/main-stage/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".prodlist__item"
+    title: ".prodlist__title"
+    dates: ".prodlist__date"
+    credits: ".prodlist__credits"
+    link: h3.prodlist__title a
+- id: kiln
+  name: Kiln Theatre
+  location:
+    area: Kilburn
+  whats_on_url: "https://kilntheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-production"
+    title: ".c-production-tile-details__title"
+    dates: ".c-production-tile-details__date"
+    link: a
+- id: lyric-hammersmith
+  name: Lyric Hammersmith
+  location:
+    area: Hammersmith
+  whats_on_url: "https://lyric.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".listing-item"
+    title: ".card__heading"
+    dates: ".card__dates"
+    blurb: ".card__summary"
+    link: a.card__fill-link
+- id: orange-tree
+  name: Orange Tree
+  location:
+    area: Richmond
+  whats_on_url: "https://orangetreetheatre.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".e-loop-item.show"
+    title: h1.elementor-heading-title
+    link: h1.elementor-heading-title a
+- id: soho-theatre
+  name: Soho Theatre
+  location:
+    area: Soho
+  whats_on_url: "https://sohotheatre.com/dean-street/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".card--event"
+    title: ".card-title"
+    dates: ".date"
+    space: ".location"
+    link: a.card-link
+- id: park-theatre
+  name: Park Theatre
+  location:
+    area: Finsbury Park
+  whats_on_url: "https://parktheatre.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".listing-item"
+    title: ".card__heading"
+    dates: ".card__dates"
+    blurb: ".card__summary"
+    link: a.card__fill-link
+- id: hackney-empire
+  name: Hackney Empire
+  location:
+    area: Hackney
+  whats_on_url: "https://www.hackneyempire.co.uk/whats-on"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-media--event"
+    title: ".c-media__title"
+    dates: ".c-media__posttitle"
+    link: a.c-media__action
+  notes: "Card dates carry no year ('7 Sept'), so the parser's default year applies."
+- id: stratford-east
+  name: Theatre Royal Stratford East
+  location:
+    area: Stratford
+  whats_on_url: "https://stratfordeast.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".Exhib"
+    title: h2
+    dates: ".postDate_l"
+    blurb: ".abautLText_Box > p"
+    link: h2 a
+- id: coronet
+  name: The Coronet Theatre
+  location:
+    area: Notting Hill
+  whats_on_url: "https://www.thecoronettheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".l-event"
+    title: h2
+    dates: time
+    link: ".l-event__cover a"
+- id: menier
+  name: Menier Chocolate Factory
+  location:
+    area: Southwark
+  whats_on_url: "https://www.menierchocolatefactory.com/whats-on/"
+  fetch_method: static
+  strategy: jsonld
+- id: barbican
+  name: Barbican Centre
+  location:
+    area: Barbican
+  whats_on_url: "https://www.barbican.org.uk/whats-on"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".listing--event"
+    title: ".listing-title"
+    dates: ".search-listing__daterange"
+    link: a.search-listing__link
+  detail_selectors:
+    dates: ".date-range"
+  notes: >
+    The listing publishes no dates at all — only 'Final week' style labels. The dates
+    selector is intentionally a class the cards do not carry, so stage 2 supplies the
+    run from the show page instead of a stray number in the blurb.
+- id: national-theatre
+  name: National Theatre
+  location:
+    area: South Bank
+  whats_on_url: "https://www.nationaltheatre.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: ".c-event-card__daterange"
+    space: ".c-event-card__location"
+    space_allow:
+      - Olivier
+      - Lyttelton
+      - Dorfman
+    link: a.c-event-card__cover-link
+  notes: >
+    Listing mixes the three auditoria with West End transfers, tours, cinema screenings
+    and NT at Home streaming. space_allow keeps only the auditoria.
+- id: bac
+  name: Battersea Arts Centre
+  location:
+    area: Battersea
+  whats_on_url: "https://bac.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: ".c-event-card__date"
+    credits: ".c-event-card__subtitle"
+    blurb: ".c-event-card__excerpt"
+    link: a.c-event-card__anchor
+- id: the-yard
+  name: The Yard Theatre
+  location:
+    area: Hackney Wick
+  whats_on_url: "https://www.theyardtheatre.co.uk/whats-on"
+  fetch_method: js_rendered
+  strategy: sanity
+  show_url_pattern: "https://www.theyardtheatre.co.uk/events/{slug}"
+  sanity:
+    project_id: vs3yf10f
+    dataset: production
+    api_version: "2021-10-21"
+  notes: >
+    Next.js App Router (no __NEXT_DATA__). Listings come from the public Sanity dataset.
+    Don't reach for a headless browser.
+- id: camden-peoples-theatre
+  name: "Camden People's Theatre"
+  location:
+    area: Euston
+  whats_on_url: "https://cptheatre.co.uk/Whats-On"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event.subs"
+    title: h3.evtit
+    dates: ".edate"
+    credits: ".prods"
+    blurb: ".etext"
+    blurb_strip: "h3, .edate, .prods"
+    tags: ".tags a"
+    link: h3.evtit a
+  notes: >
+    Highest volume on the list (~23 events per 8 weeks, mostly one-nighters). Cap picks
+    per venue in the digest. URL SLUGS TAKE NO TRAILING SLASH (/whatson/Roadside, not
+    /whatson/Roadside/) — verified against live links. Slugs are literal and
+    case-sensitive, and some carry a trailing hyphen (Like-a-Rat-).
+- id: chisenhale-dance
+  name: Chisenhale Dance Space
+  location:
+    area: Bow
+  whats_on_url: "https://www.chisenhaledancespace.co.uk/whatson/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".whats-on-card"
+    title: h2.heading
+    dates: p.date
+    link: a.button-design
+- id: shoreditch-town-hall
+  name: Shoreditch Town Hall
+  location:
+    area: Shoreditch
+  whats_on_url: "https://shoreditchtownhall.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".production-related-box"
+    title: ".related-title"
+    dates: ".date"
+    credits: ".artist"
+    link: a
+- id: new-diorama
+  name: New Diorama Theatre
+  location:
+    area: "Regent's Place"
+  whats_on_url: "https://newdiorama.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: "a.block[href*=\"/whats-on/\"]"
+    title: img
+    dates: figcaption h3
+    blurb: p
+    link: "a.block[href*='/whats-on/']"
+- id: rich-mix
+  name: Rich Mix
+  location:
+    area: Shoreditch
+  whats_on_url: "https://richmix.org.uk/live-events/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-card--event"
+    title: ".c-card__title"
+    dates: ".c-card__datetime"
+    link: a.o-button
+- id: wiltons
+  name: "Wilton's Music Hall"
+  location:
+    area: Shadwell
+  whats_on_url: "https://wiltons.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".WhatsonItem"
+    title: h3
+    dates: ".EV_ListDate"
+    link: "a[href*='/whats-on/']"
+- id: hoxton-hall
+  name: Hoxton Hall
+  location:
+    area: Hoxton
+  whats_on_url: "https://tickets-hoxtonhall.hoxtonhall.co.uk/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".show-card"
+  selectors:
+    show_card: ".show-card"
+    title: h2
+    link: a.p-3
+  notes: Own site is Squarespace marketing. Listings live on a TicketSolve booth.
+- id: punchdrunk
+  name: Punchdrunk
+  location:
+    area: Woolwich
+  whats_on_url: "https://www.punchdrunk.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".current-show-wide"
+    title: h2.current-show__title
+    dates: p.current-show__dates
+    link: a.wp-block-button__link
+    exclude:
+      - shanghai
+      - at-the-shed
+  notes: >
+    One production at a time, booking months ahead. Poll monthly, not weekly. Company
+    site, not a venue listing — three cards covering the world. The Shanghai Sleep No
+    More is an open run to 2029 and would sit in the digest forever; Viola's Room is the
+    New York transfer. Both excluded by slug.
+- id: woolwich-works
+  name: Woolwich Works
+  location:
+    area: Woolwich
+  whats_on_url: "https://www.woolwich.works/whats-on/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".c-media--event"
+  selectors:
+    show_card: a.c-media--link
+    title: h3
+    dates: ".c-media__datetime"
+    blurb: ".c-media__posttitle"
+  notes: Algolia-rendered listing. Empty in a plain GET; cards appear after Chromium.
+- id: sadlers-wells
+  name: "Sadler's Wells"
+  location:
+    area: Angel
+  whats_on_url: "https://www.sadlerswells.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: time.c-event-card__daterange
+    space: ".c-event-card__location"
+    link: a.c-event-card__cover-link
+  notes: >
+    Four spaces, all its own — main house, Lilian Baylis Studio, Sadler's Wells East,
+    Peacock. No space filter needed.
+- id: the-place
+  name: The Place
+  location:
+    area: Euston
+  whats_on_url: "https://theplace.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: a.c-event-card
+    title: ".c-event-card__title"
+    dates: ".c-event-card__date"
+    space: ".c-event-card__meta"
+    credits: ".c-event-card__subtitle"
+- id: ica
+  name: ICA
+  location:
+    area: The Mall
+  whats_on_url: "https://www.ica.art/live"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".item.live"
+    title: ".title"
+    dates: ".date.sans"
+    blurb: ".description.sans"
+    link: "a[href^=\"/live/\"]"
+  notes: >
+    Homepage ?calendar is a featured strip; /upcoming is a day docket dominated by
+    cinema. The site's Live nav is the performance programme with dated cards. Show
+    pages are a JS shell, so the listing blurb is the copy.
+- id: little-angel
+  name: Little Angel Theatre
+  location:
+    area: Islington
+  whats_on_url: "https://www.littleangeltheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: ".c-event-card__daterange"
+    space: ".c-venue__title"
+    blurb: ".c-event-card__description"
+    link: a.c-event-card__cover-link
+  notes: >
+    Mostly children's puppetry: expect a low hit rate. Filter for visiting companies and
+    heritage events.
+- id: puppet-barge
+  name: Puppet Theatre Barge
+  location:
+    area: Little Venice
+  whats_on_url: "https://www.puppetbarge.com/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".folder:-soup-contains(\"What\") .collection"
+    title: a
+    link: a
+  detail_selectors:
+    dates: "h3:nth-of-type(2)"
+  notes: >
+    /whats-on redirects to the current Richmond production. The homepage What's On
+    folder lists every current show page. Dates live on the show page's second h3.
+    Homepage columns link out to a ticket vendor, so the nav folder is the listing that
+    hops.
+- id: brixton-house
+  name: Brixton House
+  location:
+    area: Brixton
+  whats_on_url: "https://brixtonhouse.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: li.shows
+    title: ".wp-block-post-title"
+    dates: ".bhwpspx-date"
+    blurb: ".wp-block-post-excerpt__excerpt"
+    link: ".wp-block-post-featured-image a"
+- id: omnibus
+  name: Omnibus Theatre
+  location:
+    area: Clapham
+  whats_on_url: "https://www.omnibus-clapham.org/whatson"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".wixui-repeater__item"
+    title: h2.font_2
+    blurb: p.font_8
+    link: a.wixui-button
+  notes: Wix listings. Title is the first h2; dates are parsed from the card text.
+- id: the-albany
+  name: The Albany
+  location:
+    area: Deptford
+  whats_on_url: "https://www.thealbany.org.uk/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: a.card
+    title: ".card__title"
+    dates: ".card__date"
+    space: ".card__info-item--location"
+    blurb: ".card__description"
+    tags: ".card__tag"
+- id: greenwich-theatre
+  name: Greenwich Theatre
+  location:
+    area: Greenwich
+  whats_on_url: "https://greenwichtheatre.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: article.events
+    title: ".post_title"
+    dates: ".performance_date"
+    link: ".post_title a"
+- id: southwark-playhouse
+  name: Southwark Playhouse
+  location:
+    area: Borough
+  whats_on_url: "https://southwarkplayhouse.co.uk/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".wpgb-card-wrapper"
+    title: ".wpgb-block-1"
+    dates: ".wpgb-block-3"
+    space: ".wpgb-block-7"
+    credits: ".wpgb-block-2"
+    link: a.wpgb-card-layer-link
+  notes: >
+    Homepage is the listings page. Stage-2 pages carry full pricing tiers, running time,
+    content warnings.
+- id: arcola
+  name: Arcola Theatre
+  location:
+    area: Dalston
+  whats_on_url: "https://www.arcolatheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  require_space: true
+  selectors:
+    show_card: ".listing-item"
+    title: h3
+    dates: ".card__dates"
+    space: ".card__venue"
+    link: "a[href*='/event/']"
+  notes: Listing mixes workshops with productions — drop rows with no Studio 1/2 value.
+- id: marylebone-theatre
+  name: Marylebone Theatre
+  location:
+    area: Marylebone
+  whats_on_url: "https://www.marylebonetheatre.com/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".production-item"
+    title: ".show-title"
+    dates: ".overlay-buttons .flex-horizontal"
+    credits: ".creatives"
+    blurb: ".creatives"
+    link: a.production-image
+- id: riverside-studios
+  name: Riverside Studios
+  location:
+    area: Hammersmith
+  whats_on_url: "https://riversidestudios.co.uk/whats-on/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".slot-content"
+  selectors:
+    show_card: ".slot-content"
+    title: h3
+    dates: ".date"
+    space: ".event-tag"
+    link: a.button-blue-border
+  notes: >
+    React app. Events live in an inline payload that only becomes cards after Chromium
+    runs it.
+- id: the-cockpit
+  name: The Cockpit
+  location:
+    area: Marylebone
+  whats_on_url: "https://www.thecockpit.org.uk/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".views-field-title"
+    title: a.boxlink
+    dates: ".dates"
+    blurb: p
+    link: a.boxlink
+- id: artsdepot
+  name: artsdepot
+  location:
+    area: North Finchley
+  whats_on_url: "https://www.artsdepot.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".card"
+    title: h3
+    dates: p.date
+    space: p.venue
+    blurb: p.introduction
+    link: a.btn-black
+  notes: Listing includes recurring classes and workshops alongside performances.
+- id: chickenshed
+  name: Chickenshed
+  location:
+    area: Southgate
+  whats_on_url: "https://www.chickenshed.org.uk/calendar"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".card"
+    title: p.card__heading
+    dates: p.card__date
+    link: a.button--secondary
+  notes: "whats_on_url is /calendar, not /whats-on."
+- id: alexandra-palace
+  name: Alexandra Palace Theatre
+  location:
+    area: Wood Green
+  whats_on_url: "https://www.alexandrapalace.com/theatre/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event_card:not(.past-event)"
+    title: a.event_target
+    dates: p.dates
+    link: a.event_target
+  notes: >
+    Theatre what's-on, not the whole-palace listing (ice hockey, yoga, gigs). Finished
+    runs stay on the page carrying a past-event class; the selector drops them.
+- id: kings-head
+  name: "King's Head Theatre"
+  location:
+    area: Islington
+  whats_on_url: "https://kingsheadtheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".eventCard"
+    title: h3.title
+    dates: ".top-date"
+    credits: ".subtitle"
+    blurb: ".tagline"
+    tags: ".genres__link"
+    link: a.mobile-button
+  notes: >
+    The richest fringe card of the batch — writer credit, one-line tagline and its own
+    genre tags (Musical, Comedy, Drama) which feed the form tagger.
+- id: hope-theatre
+  name: The Hope Theatre
+  location:
+    area: Islington
+  whats_on_url: "https://www.thehopetheatre.com/what-s-on"
+  fetch_method: rendered
+  strategy: dated_clusters
+  notes: >
+    Wix. No repeating card class; dated_clusters pairs each date with the heading
+    immediately before it.
+- id: pleasance-islington
+  name: Pleasance Islington
+  location:
+    area: Caledonian Road
+  whats_on_url: "https://www.pleasance.co.uk/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".listing-card"
+    title: h3
+    dates: "p:last-of-type"
+    space: p.fw-bolder
+    space_allow:
+      - London
+    link: a.stretched-link
+  notes: >
+    pleasance.co.uk covers London and Edinburgh. Every card on this page is currently
+    London, but space_allow pins it so an Edinburgh season cannot leak in. Dates are the
+    last p in the card; several read as a list of one-off nights ('21st Sep, 12th Oct &
+    13th Nov') and collapse to a first-to-last range.
+- id: etcetera
+  name: Etcetera Theatre
+  location:
+    area: Camden Town
+  whats_on_url: "https://www.etceteratheatrecamden.com/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".eventlist--upcoming .eventlist-event"
+    title: h1.eventlist-title
+    dates: time.event-date
+    link: a.eventlist-title-link
+  notes: >
+    Moved to a new domain — the registry still pointed at etceteratheatre.com, which is
+    why it looked dead. A stock Squarespace Events block, the most tractable markup in
+    the whole registry. The page carries past events in a sibling .eventlist--past
+    block, so the card selector is scoped to upcoming. 74 cards collapse to 38 shows;
+    Squarespace lists one card per performance.
+- id: upstairs-gatehouse
+  name: Upstairs at the Gatehouse
+  location:
+    area: Highgate
+  whats_on_url: "https://upstairsatthegatehouse.ticketsolve.com/ticketbooth/shows"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".show-card"
+  selectors:
+    show_card: ".show-card"
+    title: h2
+    link: a.p-3
+  notes: Own site is an Elementor shell. The real listing is a TicketSolve booth.
+- id: tabernacle
+  name: The Tabernacle
+  location:
+    area: Notting Hill
+  whats_on_url: "https://www.thetabernaclew11.com/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".eventlist--upcoming .eventlist-event"
+    title: h1.eventlist-title
+    dates: time.event-date
+    blurb: ".eventlist-description"
+    link: a.eventlist-title-link
+  notes: >
+    Real site is thetabernaclew11.com; tabernaclew11.com without 'the' was hijacked.
+    What's On in the nav goes to /events. Classes live on /Activities, not this listing.
+- id: finborough
+  name: Finborough Theatre
+  location:
+    area: "Earl's Court"
+  whats_on_url: "https://www.finboroughtheatre.co.uk/productions"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: a.group
+    title: h3
+    credits: h4
+  notes: >
+    The card is itself the link, so no link selector is needed. Dates sit in a Tailwind
+    div with no stable class, so the whole card text is parsed instead — safe here
+    because the titles carry no numbers. Announced seasons run well past the window;
+    rows with no date at all are correctly left undated.
+- id: jermyn-street
+  name: Jermyn Street Theatre
+  location:
+    area: "St James's"
+  whats_on_url: "https://www.jermynstreettheatre.co.uk/now-next/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".nownextBox"
+    title: h2
+    dates: ".nownextDates h4"
+    credits: h4.boxauthor
+    link: a
+  notes: >
+    Calls the page 'Now & Next', which no candidate path would ever guess — found by
+    following the site's own nav link.
+- id: drayton-arms
+  name: Drayton Arms Theatre
+  location:
+    area: South Kensington
+  whats_on_url: "https://thedraytonarmstheatre.co.uk/index.php"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".cbp-item"
+    title: h3
+    dates: p.mb-0
+    link: "a[href^=\"/\"]"
+  notes: >
+    The listing is the homepage, index.php and all. Each card holds two links — a
+    relative 'tickets/x' booking link first, then '/x' for the show page. Taking the
+    first gave nine rows with no copy at all; the show pages behind the second carry a
+    full synopsis.
+- id: canal-cafe
+  name: Canal Café Theatre
+  location:
+    area: Little Venice
+  whats_on_url: "https://canalcafetheatre.com/our-shows/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".vc_grid-item"
+  selectors:
+    show_card: ".vc_grid-item"
+    title: ".vc_gitem-post-data"
+    dates: ".boldtext.show_info_block"
+    link: a.vc_gitem-link
+  notes: Homepage is a shell. /our-shows/ is a WPBakery grid that hydrates in the browser.
+- id: museum-of-comedy
+  name: Museum of Comedy
+  location:
+    area: Bloomsbury
+  whats_on_url: "https://www.museumofcomedy.com/whats-on/"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".slide"
+  selectors:
+    show_card: ".slide"
+    title: h2
+    link: a
+  notes: >
+    TicketSolve widget hydrates into .slide cards. The first h2 is the title; later h2s
+    are category and date, parsed from the card text.
+- id: underbelly-boulevard
+  name: Underbelly Boulevard
+  location:
+    area: Soho
+  whats_on_url: "https://underbellyboulevard.com/tickets/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".farlo-card-product"
+    title: h3
+    dates: ".farlo-card-product__meta"
+    space: ".farlo-card__meta-venues"
+    link: a.farlo-card-product__link
+  notes: >
+    Soho cabaret and variety. The meta span holds category, room and run together; the
+    date parser picks the run out of it. Three of its own rooms.
+- id: bridewell
+  name: Bridewell Theatre
+  location:
+    area: Blackfriars
+  whats_on_url: "https://sbf.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".pure-u-md-1-2"
+    title: h2.small-title
+    dates: p.event-time
+    space: ".event-cat"
+    space_allow:
+      - Theatre
+    link: a
+  notes: >
+    St Bride Foundation, a printing heritage house with a theatre in it. The listing
+    mixes 10 theatre dates with 14 'Events' and a bar exhibition — mostly letterpress
+    and wood-engraving workshops. space_allow reads the category lozenge rather than a
+    room, which is the honest use of it here.
+- id: courtyard
+  name: The Courtyard Theatre
+  location:
+    area: Hoxton
+  whats_on_url: "https://thecourtyard.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".card"
+    title: h5.card-title
+    dates: p.card-text.text-muted
+    link: a.btn-dark
+  notes: >
+    Hoxton. The only link on a card is the See Tickets booking page, so that is what
+    stage 2 hops to for copy — there is no show page on the venue site. Publishes one
+    card per performance, so Serious Money arrived ten times with ten different booking
+    links; fetch.merge_runs collapses them into the run.
+- id: playground-theatre
+  name: The Playground Theatre
+  location:
+    area: North Kensington
+  whats_on_url: "https://www.theplaygroundtheatre.org.uk/whats-on"
+  fetch_method: rendered
+  strategy: dated_clusters
+  notes: Moved from .london. Wix repeater with hashed classes; dated_clusters.
+- id: theatre503
+  name: Theatre503
+  location:
+    area: Battersea
+  whats_on_url: "https://theatre503.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".listing"
+    title: h3
+    dates: ".dates"
+    link: a.cta
+  notes: >
+    Card titles are cut at a fixed width, so stage 2 recovers the full title from the
+    show page. Programme is mostly courses and masterclasses rather than productions.
+- id: white-bear
+  name: White Bear Theatre
+  location:
+    area: Kennington
+  whats_on_url: "https://www.whitebeartheatre.co.uk/whatson"
+  fetch_method: rendered
+  strategy: dated_clusters
+  notes: Wix. Content is in the HTML after render; still no stable card class.
+- id: golden-goose
+  name: Golden Goose Theatre
+  location:
+    area: Camberwell
+  whats_on_url: "https://www.goldengoosetheatre.co.uk/whatson"
+  fetch_method: rendered
+  strategy: dated_clusters
+  notes: >
+    Wix. Dates live on disabled buttons; titles and show-page links sit in the same
+    positioned box.
+- id: brockley-jack
+  name: Brockley Jack Studio
+  location:
+    area: Crofton Park
+  whats_on_url: "https://brockleyjack.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".inner-entry"
+    title: h3.entry-title
+    dates: ".grid-entry-excerpt"
+    link: h3.entry-title a
+- id: bridge-house
+  name: The Bridge House Theatre
+  location:
+    area: Penge
+  whats_on_url: "https://thebridgehousetheatre.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".shows__card"
+    title: h2.shows__card_title
+    dates: h3.shows__card_dates
+    link: a.shows__card_more_info_btn
+  notes: >
+    Penge pub theatre. Recurring nights are dated in words ('Third Monday of the month')
+    and correctly yield no date rather than a guess.
+- id: piehouse
+  name: Piehouse Co-op
+  location:
+    area: Deptford
+  whats_on_url: "https://piehouse.coop/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".max-w-sm"
+    title: h5.text-2xl
+    dates: h5.mb-2
+    blurb: p.line-clamp-4
+    link: a
+  notes: >
+    Peckham co-op, Django-backed. Dates come out of Django's date filter as 'Sept. 9,
+    2026, 7 p.m.' — the abbreviating full stop needed handling in parse_date_range.
+- id: union-theatre
+  name: Union Theatre
+  location:
+    area: Southwark
+  whats_on_url: "https://uniontheatre.biz/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".col-sm-6"
+    title: h2
+    dates: span.dates
+    link: a.btn-default
+- id: oso-arts
+  name: OSO Arts Centre
+  location:
+    area: Barnes
+  whats_on_url: "https://osoarts.ticketsolve.com/ticketbooth"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".show-card"
+  selectors:
+    show_card: ".show-card"
+    title: h2
+    link: a.p-3
+  notes: >
+    Same TicketSolve booth as Upstairs at the Gatehouse. Show-page copy is often
+    <font> markup rather than <p>; synopsis_from_soup has to read those too.
+- id: the-space
+  name: The Space
+  location:
+    area: Isle of Dogs
+  whats_on_url: "https://space.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event-item"
+    title: h3.title
+    dates: ".event-date"
+    link: a.TS-button
+- id: half-moon
+  name: Half Moon Theatre
+  location:
+    area: Limehouse
+  whats_on_url: "https://www.halfmoon.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event_listing_item"
+    title: h2
+    dates: ".event_header_date"
+    link: a.btn
+  notes: >
+    Children's theatre in Limehouse. Cards carry per-performance ticket rows; the first
+    a.btn is the show page, the rest go to the box office.
+- id: cafe-oto
+  name: Café OTO
+  location:
+    area: Dalston
+  whats_on_url: "https://www.cafeoto.co.uk/events/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".each-activity"
+    title: ".each-header a"
+    dates: ".each-header"
+    link: ".each-header a"
+  notes: >
+    Dalston experimental music. Two .each-header blocks per card, date first and title
+    second, so the date selector takes the first and the title takes the one that is a
+    link. One card per night by design, not per performance.
+- id: the-glitch
+  name: The Glitch
+  location:
+    area: Waterloo
+  whats_on_url: "https://www.tickettailor.com/events/vaultcreativearts"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".events-listing__item"
+  selectors:
+    show_card: ".events-listing__item"
+    title: ".event__title"
+    dates: ".event-meta__date"
+    link: a.event__link
+  notes: >
+    theglitch.london/whats-on redirects to the VAULT Creative Arts Ticket Tailor booth
+    (Lower Marsh Arts Club). Listing cards are empty until Chromium runs. Event pages
+    (e.g. A Job Interview) have the synopsis — hop with Chromium, a plain GET is a
+    JS shell.
+- id: stone-nest
+  name: Stone Nest
+  location:
+    area: Soho
+  whats_on_url: "https://www.stonenest.org/events"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".events-current .collection-item-event"
+    title: ".whatson-title .heading.title:not(.cyr)"
+    dates: ".whatson-date:not(.w-condition-invisible)"
+    blurb: ".whatson-info-short"
+    link: a.whatson-link
+  notes: Past events stay in a second Webflow list; the selector keeps only .events-current.
+- id: tate-modern
+  name: Tate Modern
+  location:
+    area: Bankside
+  whats_on_url: "https://www.tate.org.uk/whats-on?date_range=from_now&gallery_group=tate-modern"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".card--search-promo"
+    title: ".card__title--maintitle"
+    dates: ".event-info__date"
+    space: ".event-info__venue"
+    space_allow:
+      - Tate Modern
+    link: a
+  notes: >
+    Tate's what's-on mixes both Millbank galleries; space_allow drops Tate Britain.
+    Mostly exhibitions — the form tagger does not know "exhibition".
+- id: bethnal-green-wmc
+  name: Bethnal Green Working Men's Club
+  location:
+    area: Bethnal Green
+  whats_on_url: "https://www.tickettailor.com/events/workingmens-club"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".events-listing__item"
+  selectors:
+    show_card: ".events-listing__item"
+    title: ".event__title"
+    dates: ".event-meta__date"
+    link: a.event__link
+  notes: >
+    workersplaytime.net is a shell. The Ticket Tailor booth is the listing; Cloudflare
+    403s a plain GET. Event pages have copy — hop through Chromium.
+- id: royal-vauxhall-tavern
+  name: Royal Vauxhall Tavern
+  location:
+    area: Vauxhall
+  whats_on_url: "https://www.vauxhalltavern.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".block-event-new"
+    title: ".post-title"
+    dates: ".post-date"
+    link: ".post-title a"
+  notes: >
+    Listing cards are title and date only. Copy lives on /events/event/ pages
+    (Cheer Up, Sunday Cabaret, etc.), so stage 2 must hop. Static GET is enough.
+- id: hen-and-chickens
+  name: Hen & Chickens Theatre
+  location:
+    area: Islington
+  whats_on_url: "https://www.unrestrictedview.co.uk/events"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: a.group
+  selectors:
+    show_card: "a.group[href^='/events/']"
+    title: h3
+    dates: ".text-primary.text-sm"
+    blurb: p.text-muted-foreground
+    link: a.group
+  skip_stage2: true
+  notes: >
+    Programme now lives on unrestrictedview.co.uk. /whats-on 404s; /events is the listing
+    and is a JS shell until Chromium runs.
+- id: tabard
+  name: Tabard Theatre
+  location:
+    area: Chiswick
+  whats_on_url: "https://www.tabard.org.uk/productions"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: "[class*='group/card']"
+    title: h3.font-display
+    link: "a[href*='/production/']"
+  notes: tabardtheatre.co.uk is dead. tabard.org.uk/productions is the current listing.
+- id: old-vic
+  name: The Old Vic
+  location:
+    area: Waterloo
+  whats_on_url: "https://www.oldvictheatre.com/stage/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: a.poster-card
+    title: ".sr-only"
+    link: a.poster-card
+  detail_selectors:
+    dates: ".event-hero-right__dates"
+  notes: Listing cards have no dates — only an sr-only title. Stage 2 reads the run from the show page.
+- id: shakespeares-globe
+  name: "Shakespeare's Globe"
+  location:
+    area: Bankside
+  whats_on_url: "https://www.shakespearesglobe.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: time.c-event-card__date
+    blurb: ".c-event-card__description"
+    space: ".c-event-card__venue"
+    link: a.c-event-card__cover-link
+- id: regents-park
+  name: "Regent's Park Open Air Theatre"
+  location:
+    area: "Regent's Park"
+  whats_on_url: "https://openairtheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".ProductionTeaser"
+    title: ".ProductionTeaser-title"
+    dates: ".ProductionTeaser-content-dates"
+    blurb: ".ProductionTeaser-excerpt"
+    link: a.ProductionTeaser-link
+- id: bridge-theatre
+  name: Bridge Theatre
+  location:
+    area: London Bridge
+  whats_on_url: "https://www.bridgetheatre.co.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".global-header__nav-item"
+    title: h4.global-header__nav-heading
+    dates: span.date
+    link: a.global-header__nav-link
+  notes: The what's-on page itself is a Spektrix shell. Current shows are the header nav cards.
+- id: roundhouse
+  name: Roundhouse
+  location:
+    area: Chalk Farm
+  whats_on_url: "https://www.roundhouse.org.uk/whats-on"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event-card"
+    title: ".event-card__title"
+    dates: ".event-card__date"
+    link: a.event-card__link
+  notes: Mix of gigs, clubs and youth workshops next to the odd show.
+- id: southbank-centre
+  name: Southbank Centre
+  location:
+    area: South Bank
+  whats_on_url: "https://www.southbankcentre.co.uk/whats-on"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: ".c-event-card, .c-event-masthead"
+  selectors:
+    show_card: ".c-event-card"
+    title: ".c-event-card__title"
+    dates: time.c-event-card__daterange
+    space: ".c-event-card__location"
+    blurb: ".c-event-card__details"
+    link: a.c-event-card__cover-link
+  notes: >
+    Cloudflare 403s a plain GET. Same c-event-card family as the Globe. Cards are a
+    one-line blurb; the rest of the copy lives on /whats-on/<slug>/, so stage 2 must
+    hop through Chromium. render_wait matches listing cards or the event masthead.
+- id: royal-ballet-opera
+  name: Royal Ballet and Opera
+  location:
+    area: Covent Garden
+  whats_on_url: "https://www.rbo.org.uk/tickets-and-events"
+  fetch_method: rendered
+  strategy: selectors
+  render_wait: h2
+  selectors:
+    show_card: div.sc-4ax36u-2
+    title: h2
+    blurb: div.sc-4ax36u-5
+    link: a
+  notes: >
+    Styled-components hashes the card class. sc-4ax36u-2 is the listing row today and
+    will break on the next frontend deploy. Cards carry a one-line blurb; the plot
+    lives on /production/ pages (Don Giovanni and the rest), so stage 2 must hop.
+    Listing is a JS shell; production pages SSR. Tea dances and date-list pages
+    have no plot to hop to — the card line is the copy.
+- id: london-coliseum
+  name: London Coliseum
+  location:
+    area: St Martin's Lane
+  whats_on_url: "https://londoncoliseum.org/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: main article.card--event
+    title: ".card__heading"
+    dates: ".card__dates"
+    blurb: ".card__summary"
+    link: a.card__fill-link
+- id: eno
+  name: English National Opera
+  location:
+    area: St Martin's Lane
+  whats_on_url: "https://www.eno.org/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: main article.card--event
+    title: ".card__heading"
+    dates: ".card__dates"
+    space: ".card__meta"
+    blurb: ".card__summary"
+    link: a.card__fill-link
+  notes: Same CMS as the Coliseum; ENO bills include Coliseum runs, so Tosca can appear twice.
+- id: sohoplace
+  name: "@sohoplace"
+  location:
+    area: Soho
+  whats_on_url: "https://sohoplace.org/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".site-event-card"
+    title: ".site-event-card__title"
+    dates: ".site-event-card__dates"
+    blurb: ".site-event-card__synopsis"
+    link: ".site-event-poster a"
+- id: troubadour
+  name: Troubadour Theatres
+  location:
+    area: Wembley Park
+  whats_on_url: "https://www.troubadourtheatres.com/explore-shows"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".c-featured-event"
+    title: h3.c-featured-event__details__title
+    dates: ".c-featured-event__details__discription"
+    link: a
+  notes: >
+    Company site covering Wembley Park and Canary Wharf. Their CSS class really is
+    `discription`.
+- id: jacksons-lane
+  name: Jacksons Lane
+  location:
+    area: Highgate
+  whats_on_url: "https://www.jacksonslane.org.uk/whats-on/all-performances/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event_item"
+    title: h5
+    dates: ".post_meta"
+    blurb: ".event_desc"
+    tags: ".event_category h6"
+    link: a.btn
+  notes: >
+    The /whats-on/ hub is a CookieYes + Spektrix shell. All Performances is ordinary
+    WordPress cards with dates in `.post_meta`.
+- id: barons-court
+  name: Barons Court Theatre
+  location:
+    area: Barons Court
+  whats_on_url: "https://www.baronscourttheatre.com/upcoming-performances"
+  fetch_method: static
+  strategy: dated_clusters
+  notes: >
+    Wix hashed classes, same as White Bear / Golden Goose. The upcoming-performances
+    page has the dates in the HTML, so dated_clusters can pair them without Chromium.
+- id: unicorn
+  name: Unicorn Theatre
+  location:
+    area: London Bridge
+  whats_on_url: "https://www.unicorntheatre.com/whats-on"
+  fetch_method: static
+  strategy: selectors
+  lookahead_weeks: 16
+  selectors:
+    show_card: a.c-media--event
+    title: ".c-media__title"
+    dates: ".c-media__datetime"
+    space: ".c-media__posttitle"
+  notes: >
+    Same card family as Donmar / Royal Court. 16-week lookahead keeps the Christmas
+    shows (Santa's First Christmas opens mid-November).
+- id: polka
+  name: Polka Theatre
+  location:
+    area: Wimbledon
+  whats_on_url: "https://www.polkatheatre.com/whats-on"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".events__listing-item"
+    title: a.title
+    dates: ".date"
+    link: a.title
+- id: vfd
+  name: VFD
+  location:
+    area: Dalston
+  whats_on_url: "https://www.vfdalston.com/our-events"
+  fetch_method: static
+  strategy: selectors
+  lookahead_weeks: 12
+  selectors:
+    show_card: ".eventlist-event"
+    title: h1.eventlist-title
+    dates: time.event-date
+    link: a.eventlist-title-link
+    exclude:
+      - "Private Hire"
+      - "Private Event"
+      - "Closed for"
+  notes: Squarespace event list. Private hires are dropped by exclude.
+- id: siobhan-davies
+  name: Siobhan Davies Studios
+  location:
+    area: Elephant and Castle
+  whats_on_url: "https://www.siobhandavies.com/events/"
+  fetch_method: static
+  strategy: selectors
+  lookahead_weeks: 16
+  selectors:
+    show_card: article
+    title: h2.entry-title a
+    dates: h2.entry-title
+    link: h2.entry-title a
+    title_cut_dates: true
+    exclude:
+      - "Dance Classes"
+      - "Open Practice"
+      - "Unscary Saturdays"
+  notes: >
+    Events archive mixes classes and performances. Exclude drops the class blocks;
+    titles have the dates glued on, so title_cut_dates strips them.
+- id: immersive-rumours
+  name: Immersive Rumours
+  location:
+    area: London
+  whats_on_url: "https://www.immersiverumours.com/current-shows-london"
+  fetch_method: static
+  strategy: immersive_rumours
+  skip_stage2: true
+  lookahead_weeks: 40
+  notes: >
+    Curated London immersive round-up. At-home / WhatsApp listings are reassigned
+    to venue HOME. 40-week lookahead keeps the coming-soon block (Pirates, Phantom Peak).
+- id: home
+  name: HOME
+  location:
+    area: At home

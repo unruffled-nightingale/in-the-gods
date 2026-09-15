@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>In the Gods</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#6E2431">
+<meta name="description" content="Taste-filtered London theatre.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="In the Gods">
+<meta property="og:title" content="In the Gods">
+<meta property="og:description" content="Taste-filtered London theatre.">
+<meta property="og:url" content="https://inthegods.co.uk/">
+<meta property="og:image" content="https://inthegods.co.uk/logo.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1738">
+<meta property="og:image:height" content="1736">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="In the Gods">
+<meta name="twitter:description" content="Taste-filtered London theatre.">
+<meta name="twitter:image" content="https://inthegods.co.uk/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,200..600;1,6..72,200..600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEEE8;
+    --ink:#1B1A18;
+    --ink-soft:#55524C;
+    --mute:#9A948B;
+    --line:#DAD7CE;
+    --hair:#E4E1D9;
+    --claret:#6E2431;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  ::selection{background:var(--ink);color:var(--paper)}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Newsreader",Georgia,serif;
+    font-size:17px; line-height:1.6;
+    padding:26px 22px 90px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:660px;margin:0 auto}
+
+  .caps{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:10px; font-weight:500; text-transform:uppercase;
+    letter-spacing:.18em;
+  }
+
+  /* ---------- ask ---------- */
+  .ask{
+    display:flex; align-items:center;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+  }
+  .ask input{
+    flex:1; min-width:0; border:none; background:transparent;
+    font-family:"Newsreader",Georgia,serif;
+    font-size:17px; font-weight:300; font-style:italic; color:#111;
+    padding:10px 0; border-radius:0;
+  }
+  .ask input::placeholder{
+    color:#3F3C38; opacity:1;
+    font-style:italic; font-weight:300;
+  }
+  .ask input:focus,.ask input:focus-visible,.ask button:focus,.ask button:focus-visible{outline:none}
+  .ask button{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:10px; font-weight:600; text-transform:uppercase;
+    letter-spacing:.2em; background:none; border:none; color:var(--ink);
+    padding:10px 0 10px 18px; cursor:pointer; transition:color .2s;
+    display:flex; align-items:center; justify-content:flex-end;
+    min-width:4.4em;
+  }
+  .ask button:hover{color:var(--claret)}
+  .ask button:disabled{
+    color:var(--mute); opacity:.4; cursor:default;
+  }
+  .ask button:disabled:hover{color:var(--mute)}
+  .ask-wait{
+    display:none; width:12px; height:12px;
+    border:1.5px solid var(--line);
+    border-top-color:var(--ink);
+    border-radius:50%;
+  }
+  .ask button.busy{opacity:1}
+  .ask button.busy .ask-label{display:none}
+  .ask button.busy .ask-wait{
+    display:block;
+    animation:ask-spin .7s linear infinite;
+  }
+  @keyframes ask-spin{to{transform:rotate(360deg)}}
+
+  /* ---------- filter row ---------- */
+  .bar{
+    display:flex; align-items:center; gap:18px;
+    padding:22px 0 16px; min-height:21px;
+  }
+  .bar .grp{display:flex;align-items:center;gap:18px;margin-left:auto}
+  .tog{
+    background:none; border:none; padding:0; cursor:pointer;
+    color:var(--mute); line-height:0; transition:color .2s;
+  }
+  .tog:hover{color:var(--ink)}
+  .tog svg{width:21px;height:21px;display:block;
+           stroke-width:1.1;vector-effect:non-scaling-stroke}
+  .tog[aria-pressed=true]{color:var(--claret)}
+  .tog[aria-pressed=true] svg{stroke-width:1.5}
+  .tog#tStar[aria-pressed=true] svg{fill:var(--claret)}
+  .tog#tFilter[aria-pressed=true]{color:var(--claret)}
+  .bar .n{color:var(--mute)}
+  .bar .n b{color:var(--ink);font-weight:600}
+  .reset{
+    font-family:"Archivo",system-ui,sans-serif;font-size:10px;font-weight:500;
+    text-transform:uppercase;letter-spacing:.18em;background:none;border:none;
+    color:var(--claret);cursor:pointer;padding:0;
+  }
+  .reset:hover{color:var(--ink)}
+  .reading{
+    font-size:16px;font-style:italic;font-weight:300;color:var(--ink-soft);
+    line-height:1.5;padding:0 0 6px;max-width:52ch;
+  }
+
+  /* ---------- filter panel ---------- */
+  #filters{overflow:hidden;height:0}
+  .filters-inner{padding:4px 0 8px}
+  .f-sec{padding:22px 0;border-top:1px solid var(--hair)}
+  .f-sec:first-child{border-top:none;padding-top:10px}
+  .f-sec .caps{color:var(--mute);margin-bottom:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:10px;font-weight:500;text-transform:uppercase;
+    letter-spacing:.14em;background:none;cursor:pointer;
+    color:var(--mute);border:1px solid var(--hair);
+    padding:8px 12px;transition:color .2s,border-color .2s;
+  }
+  .chip:hover{color:var(--ink);border-color:var(--ink-soft)}
+  .chip[aria-pressed=true]{color:var(--claret);border-color:var(--claret)}
+  .range{position:relative;height:28px;margin:4px 0 8px}
+  .range-line{
+    position:absolute;left:0;right:0;top:13px;height:1px;background:var(--hair);
+  }
+  .range-fill{
+    position:absolute;top:13px;height:1px;background:var(--claret);pointer-events:none;
+  }
+  .range input[type=range]{
+    position:absolute;left:0;width:100%;top:6px;margin:0;
+    background:none;pointer-events:none;
+    -webkit-appearance:none;appearance:none;height:16px;
+  }
+  .range input[type=range]::-webkit-slider-runnable-track{height:1px;background:transparent}
+  .range input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;pointer-events:auto;cursor:pointer;
+    width:14px;height:14px;border-radius:50%;
+    background:var(--claret);border:none;margin-top:-6.5px;
+  }
+  .range input[type=range]::-moz-range-track{height:1px;background:transparent;border:none}
+  .range input[type=range]::-moz-range-thumb{
+    pointer-events:auto;cursor:pointer;
+    width:14px;height:14px;border-radius:50%;
+    background:var(--claret);border:none;
+  }
+  .range-labels{
+    display:flex;justify-content:space-between;
+    font-size:14px;font-weight:300;font-style:italic;color:var(--ink-soft);
+  }
+
+  /* ---------- entries ---------- */
+  article{
+    position:relative;
+    border-bottom:1px solid var(--hair);
+  }
+  .slot{padding:38px 0 34px}
+  article.folding{overflow:hidden;pointer-events:none}
+  /* opacity nests, so fade the children rather than the article —
+     otherwise the title can never sit brighter than its parent */
+  article .slot > *{transition:opacity .18s linear}
+  article.binned .slot > *:not(h2){opacity:.34}
+  article.binned h2{opacity:.66}
+  article.binned h2 a{
+    text-decoration:line-through;
+    text-decoration-thickness:2.5px;
+    text-underline-offset:0;
+  }
+  .when{color:var(--mute);margin-bottom:14px}
+  .when i{font-style:normal;color:var(--ink-soft)}
+  h2{
+    font-family:"Bodoni Moda",Didot,"Times New Roman",serif;
+    font-weight:600; font-style:italic;
+    font-optical-sizing:none;
+    font-variation-settings:"opsz" 10;
+    -webkit-font-smoothing:auto;
+    font-size:clamp(32px,8vw,46px);
+    line-height:1.0; letter-spacing:.022em;
+    margin:0 0 16px; max-width:19ch;
+  }
+  h2 a{color:var(--claret);text-decoration:none;transition:color .2s}
+  h2 a:hover{color:var(--ink)}
+  .venue{color:var(--ink-soft);margin-bottom:10px}
+  .venue .sep{
+    color:var(--ink-soft);letter-spacing:0;font-weight:400;
+    font-size:1.15em;margin:0 1.05em;
+  }
+  .venue .tag{color:var(--claret)}
+  .byline{
+    font-size:14px; font-weight:300; font-style:italic;
+    color:var(--ink-soft); margin:0 0 14px; max-width:48ch;
+  }
+  .blurb{
+    font-size:15px; font-weight:300; line-height:1.72;
+    color:var(--ink-soft); max-width:52ch; margin:0 0 12px;
+  }
+  .blurb.none{
+    font-family:"Archivo",system-ui,sans-serif;font-size:10px;
+    text-transform:uppercase;letter-spacing:.18em;color:var(--mute);
+  }
+  .why{
+    font-size:14.5px;font-style:italic;font-weight:300;color:var(--claret);
+    margin-top:14px;padding-left:16px;border-left:1px solid var(--claret);
+    line-height:1.55;max-width:46ch;
+  }
+  .acts{display:flex;gap:20px;margin-top:22px}
+  .act{
+    background:none;border:none;padding:0;cursor:pointer;
+    color:var(--mute);line-height:0;transition:color .2s;
+  }
+  .act:hover{color:var(--ink)}
+  .act svg{width:15px;height:15px;display:block;stroke-width:1.1}
+  .act[aria-pressed=true]{color:var(--claret)}
+  .act[aria-pressed=true] svg{stroke-width:1.5}
+  .act.star[aria-pressed=true] svg{fill:var(--claret)}
+
+  .tog:focus-visible,.act:focus-visible,.reset:focus-visible,
+  .chip:focus-visible,.range input:focus-visible{
+    outline:1px solid var(--claret);outline-offset:4px}
+
+  .bin-tools{padding:4px 0 18px}
+  .bin-tools[hidden]{display:none}
+
+  .empty{
+    padding:56px 0;font-size:19px;font-weight:200;font-style:italic;
+    color:var(--mute);
+  }
+
+  @media (max-width:600px){
+    body{padding:20px 18px 70px}
+    .slot{padding:32px 0 28px}
+    h2{max-width:none}
+  }
+  /* ---------- splash ---------- */
+  .splash{
+    position:fixed; inset:0; z-index:40;
+    background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    padding:26px 22px;
+  }
+  .splash-inner{max-width:660px; width:100%; text-align:center}
+  .splash h1{
+    font-family:"Bodoni Moda",Didot,"Times New Roman",serif;
+    font-weight:400; font-style:italic;
+    font-optical-sizing:none;
+    font-variation-settings:"opsz" 10;
+    -webkit-font-smoothing:auto;
+    font-size:clamp(32px,8vw,46px);
+    line-height:1.0; letter-spacing:.022em;
+    color:var(--claret);
+    margin:0 0 16px;
+  }
+  .splash .caps{
+    color:var(--ink-soft);
+  }
+  .splash.out{
+    opacity:0; pointer-events:none;
+    transition:opacity .35s linear;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+    .ask-wait{animation:none!important}
+    .splash.out{transition:none}
+  }
+</style>
+</head>
+<body>
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <h1>In the Gods</h1>
+    <p class="caps">A place to find events in London</p>
+  </div>
+</div>
+<div class="wrap">
+
+<div class="ask">
+  <input type="text" id="q" autocomplete="off"
+         placeholder="" aria-label="Ask">
+  <button id="go" disabled aria-label="Ask">
+    <span class="ask-label">Ask</span>
+    <span class="ask-wait" aria-hidden="true"></span>
+  </button>
+</div>
+
+<div class="bar">
+  <div class="grp">
+  <div class="n caps" id="count"></div>
+  <button class="tog" id="tStar" aria-pressed="false" aria-label="Starred only">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-linejoin="round"><path d="M12 3.2l2.7 5.9 6.3.85-4.6 4.4 1.15 6.4L12 17.7l-5.55 3.05L7.6 14.35 3 9.95l6.3-.85z"/></svg>
+  </button>
+  <button class="tog" id="tBin" aria-pressed="false" aria-label="Binned only">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-linecap="round"><path d="M3.6 6.4h16.8M9.4 6.4V4.2h5.2v2.2M6.2 6.4l1 13.4h9.6l1-13.4M10 10.2v6M14 10.2v6"/></svg>
+  </button>
+  <button class="tog" id="tFilter" aria-pressed="false" aria-expanded="false" aria-label="Filters">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+  </button>
+  </div>
+</div>
+<div id="filters" aria-hidden="true">
+  <div class="filters-inner" id="filtersInner">
+    <div class="f-sec">
+      <button class="reset" id="fReset">Reset</button>
+    </div>
+    <div class="f-sec">
+      <div class="caps">When</div>
+      <div class="range">
+        <div class="range-line"></div>
+        <div class="range-fill" id="rangeFill"></div>
+        <input type="range" id="rFrom" min="0" max="1" step="1" aria-label="From date">
+        <input type="range" id="rTo" min="0" max="1" step="1" aria-label="To date">
+      </div>
+      <div class="range-labels"><span id="labFrom"></span><span id="labTo"></span></div>
+    </div>
+    <div class="f-sec">
+      <div class="caps">Tags</div>
+      <div class="chips" id="tagChips"></div>
+    </div>
+    <div class="f-sec">
+      <div class="caps">Venues</div>
+      <div class="chips" id="venueChips"></div>
+    </div>
+  </div>
+</div>
+<div class="reading" id="reading" hidden></div>
+<div class="bin-tools" id="binTools" hidden>
+  <button class="reset" id="restoreAll">Restore all</button>
+</div>
+
+<main id="list"></main>
+
+</div>
+
+<script>
+const _ALL = /*__EVENTS__*/[];
+const M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt = iso => { const d=new Date(iso+"T00:00:00"); return d.getDate()+" "+M[d.getMonth()]; };
+const fmtRange = iso => {
+  const d=new Date(iso+"T00:00:00");
+  const y=filters.from.slice(0,4)!==filters.to.slice(0,4);
+  return fmt(iso)+(y ? " "+d.getFullYear() : "");
+};
+const todayISO = () => {
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+
+         String(d.getDate()).padStart(2,"0");
+};
+// Weekly extract still holds last night's closers; they cannot appear on a
+// slider that starts today, so drop them from the page set and the total.
+const EVENTS = _ALL.filter(e => (e.last_date||"") >= todayISO());
+const parseISO = iso => {
+  const [y,m,d]=(iso||"").split("-").map(Number);
+  return Date.UTC(y, (m||1)-1, d||1);
+};
+const toISO = ms => new Date(ms).toISOString().slice(0,10);
+function windowEndISO(){
+  const d=new Date();
+  // Last day of the month three months out (Sep → 30 Nov). If a show
+  // *starts* after that, extend just far enough that it can appear —
+  // otherwise it sits in the total but is unreachable on the slider.
+  // Do not use last_date: standing bookings run years out.
+  const end=new Date(d.getFullYear(), d.getMonth()+3, 0);
+  let max=end.getFullYear()+"-"+String(end.getMonth()+1).padStart(2,"0")+"-"+
+         String(end.getDate()).padStart(2,"0");
+  for (const e of EVENTS){
+    const start=e.first_date||"";
+    if (start>max) max=start;
+  }
+  return max;
+}
+function dateSpan(){
+  const min=todayISO();
+  const max=windowEndISO();
+  return {min, max: max<min ? min : max};
+}
+function rangeMax(){
+  const s=dateSpan();
+  return Math.max(1, Math.round((parseISO(s.max)-parseISO(s.min))/86400000));
+}
+const isoToIdx = iso => {
+  const s=dateSpan(), max=rangeMax();
+  return Math.max(0, Math.min(max,
+    Math.round((parseISO(iso)-parseISO(s.min))/86400000)));
+};
+const idxToIso = i => toISO(parseISO(dateSpan().min)+i*86400000);
+
+const TAG_ORDER=["theatre","concert","comedy","class","stand-up","dance","talk","musical","spoken-word","film","social","cabaret","opera","puppetry","sport","exhibition","immersive","magic","circus"];
+const ALL_TAGS=[...new Set(EVENTS.flatMap(e=>e.tags||[]))].sort((a,b)=>{
+  const ia=TAG_ORDER.indexOf(a), ib=TAG_ORDER.indexOf(b);
+  if(ia>=0 && ib>=0) return ia-ib;
+  if(ia>=0) return -1;
+  if(ib>=0) return 1;
+  return a.localeCompare(b);
+});
+const ALL_VENUES=[...new Map(EVENTS.map(e=>[e.venue_id, e.venue_name||e.venue_id])).entries()]
+  .sort((a,b)=>a[1].localeCompare(b[1]));
+const VENUE_IDS=new Set(ALL_VENUES.map(([id])=>id));
+
+function defaultFilters(){
+  const s=dateSpan();
+  return {tags:[], venues:[], from:s.min, to:s.max};
+}
+let filters=defaultFilters();
+let filtersOpen=false;
+
+/* Stable key: venue + slugified title. Survives re-extraction, because
+   array position does not. Value carries enough metadata that a starred
+   show stays meaningful even after it drops out of the current feed. */
+const slug = s => s.toLowerCase().normalize("NFKD")
+  .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,80);
+const keyOf = e => e.venue_id + "::" + slug(e.title);
+const meta = e => ({title:e.title, venue:e.venue_name, url:e.url,
+                    from:e.first_date, to:e.last_date, at:Date.now()});
+
+let starred={}, binned={};      // key -> metadata
+let mode="all", subset=null;
+
+// Biased shuffle: theatre and starred rise, nothing is guaranteed first.
+const THEATRE_W = 4;
+const STAR_W = 5;
+function weightOf(e){
+  let w = 1;
+  if ((e.tags || []).includes("theatre")) w *= THEATRE_W;
+  if (keyOf(e) in starred) w *= STAR_W;
+  return w;
+}
+function weightedShuffle(arr){
+  return arr
+    .map(e => ({e, k: Math.pow(Math.random(), 1 / weightOf(e))}))
+    .sort((a, b) => b.k - a.k)
+    .map(x => x.e);
+}
+
+const SVG={
+ star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M12 3.2l2.7 5.9 6.3.85-4.6 4.4 1.15 6.4L12 17.7l-5.55 3.05L7.6 14.35 3 9.95l6.3-.85z"/></svg>',
+ bin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3.6 6.4h16.8M9.4 6.4V4.2h5.2v2.2M6.2 6.4l1 13.4h9.6l1-13.4M10 10.2v6M14 10.2v6"/></svg>'
+};
+
+function parseStore(raw){
+  if(!raw) return {};
+  try{
+    const v = typeof raw === "string" ? JSON.parse(raw) : raw;
+    return v && typeof v === "object" ? v : {};
+  }catch(e){ return {}; }
+}
+async function readKey(name){
+  // Claude artifacts expose window.storage; a normal page (and most MCP
+  // UI iframes) use localStorage. Prefer the host store when it already
+  // has data, otherwise fall back.
+  if(window.storage && typeof window.storage.get === "function"){
+    try{
+      const r = await window.storage.get(name);
+      const v = parseStore(r && r.value);
+      if(Object.keys(v).length) return v;
+    }catch(e){}
+  }
+  try{ return parseStore(localStorage.getItem(name)); }
+  catch(e){ return {}; }
+}
+async function writeKey(name, obj){
+  const json = JSON.stringify(obj);
+  let ok = false;
+  if(window.storage && typeof window.storage.set === "function"){
+    try{ await window.storage.set(name, json); ok = true; }catch(e){}
+  }
+  try{ localStorage.setItem(name, json); ok = true; }catch(e){}
+  if(!ok) console.warn("persist failed", name);
+}
+async function load(){
+  starred = await readKey("starred.v2");
+  binned  = await readKey("binned.v2");
+  const seeded = await readKey("prestar-seeded.v1");
+  let dirty=false;
+  for (const k of Object.keys(seeded)){
+    if (k in starred){ delete starred[k]; dirty=true; }
+  }
+  if (dirty) await writeKey("starred.v2", starred);
+  if (Object.keys(seeded).length) await writeKey("prestar-seeded.v1", {});
+  filters = defaultFilters();
+}
+let persistTimer = null;
+function persist(){
+  // debounce rapid taps so the last state is what gets written
+  clearTimeout(persistTimer);
+  persistTimer = setTimeout(() => {
+    writeKey("starred.v2", starred);
+    writeKey("binned.v2", binned);
+  }, 120);
+}
+
+function visible(){
+  let l=EVENTS;
+  if(filters.tags.length){
+    const want=new Set(filters.tags);
+    l=l.filter(e=>(e.tags||[]).some(t=>want.has(t)));
+  }
+  if(filters.venues.length){
+    const want=new Set(filters.venues);
+    l=l.filter(e=>want.has(e.venue_id));
+  }
+  l=l.filter(e=>e.first_date<=filters.to && e.last_date>=filters.from);
+  if(subset){
+    const have=new Map(l.map(e=>[e.id,e]));
+    l=subset.map(id=>have.get(id)).filter(Boolean);
+  }
+  if(mode==="starred") l=l.filter(e=>keyOf(e) in starred);
+  else if(mode==="binned") l=l.filter(e=>keyOf(e) in binned);
+  else l=l.filter(e=>!(keyOf(e) in binned));
+  return l;
+}
+
+function filtersActive(){
+  const d=defaultFilters();
+  return filters.tags.length>0 || filters.venues.length>0 ||
+    filters.from!==d.from || filters.to!==d.to;
+}
+
+function syncFilterToggle(){
+  document.getElementById("tFilter").setAttribute("aria-pressed",
+    (filtersOpen || filtersActive()) ? "true" : "false");
+}
+
+function applyFilters(){
+  persist();
+  syncFilterToggle();
+  render();
+}
+
+function resetFilters(){
+  filters=defaultFilters();
+  subset=null;
+  syncFilterUI();
+  applyFilters();
+}
+
+function restoreAll(){
+  if(!Object.keys(binned).length) return;
+  binned={};
+  persist();
+  mode="all";
+  document.getElementById("tStar").setAttribute("aria-pressed","false");
+  document.getElementById("tBin").setAttribute("aria-pressed","false");
+  render();
+}
+
+function syncBinTools(){
+  document.getElementById("binTools").hidden =
+    !(mode==="binned" && Object.keys(binned).length);
+}
+
+function recount(){
+  const list=visible();
+  document.getElementById("count").innerHTML =
+    "<b>"+list.length+"</b> / "+EVENTS.length;
+  syncBinTools();
+  const main=document.getElementById("list");
+  if(!list.length && !main.querySelector("article")){
+    main.innerHTML='<div class="empty">Nothing here.</div>';
+  }
+}
+
+function foldAway(article){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    article.remove();
+    recount();
+    return;
+  }
+  const h=article.offsetHeight;
+  article.classList.add("folding");
+  article.style.height=h+"px";
+  const ms=Math.round(Math.min(560, Math.max(240, h/0.95)));
+  // Web Animations is more reliable than transitionend on iOS
+  const anim=article.animate(
+    [{height:h+"px"},{height:"0px"}],
+    {duration:ms, easing:"linear", fill:"forwards"}
+  );
+  let done=false;
+  const finish=()=>{
+    if(done) return;
+    done=true;
+    article.remove();
+    recount();
+  };
+  anim.finished.then(finish, finish);
+  setTimeout(finish, ms+80);
+}
+
+function syncRange(){
+  const max=rangeMax();
+  const a=isoToIdx(filters.from), b=isoToIdx(filters.to);
+  const from=document.getElementById("rFrom");
+  const to=document.getElementById("rTo");
+  from.max=to.max=max;
+  from.value=a; to.value=b;
+  document.getElementById("labFrom").textContent=fmtRange(filters.from);
+  document.getElementById("labTo").textContent=fmtRange(filters.to);
+  const fill=document.getElementById("rangeFill");
+  fill.style.left=(a/max*100)+"%";
+  fill.style.width=((b-a)/max*100)+"%";
+}
+
+function syncChips(){
+  document.querySelectorAll("#tagChips .chip").forEach(btn=>{
+    btn.setAttribute("aria-pressed", filters.tags.includes(btn.dataset.v));
+  });
+  document.querySelectorAll("#venueChips .chip").forEach(btn=>{
+    btn.setAttribute("aria-pressed", filters.venues.includes(btn.dataset.v));
+  });
+}
+
+function syncFilterUI(){
+  syncRange();
+  syncChips();
+  syncFilterToggle();
+}
+
+function toggleChip(kind, value){
+  const arr = kind==="tag" ? filters.tags : filters.venues;
+  const i=arr.indexOf(value);
+  if(i>=0) arr.splice(i,1); else arr.push(value);
+  syncChips();
+  applyFilters();
+}
+
+function buildChips(){
+  const tagEl=document.getElementById("tagChips");
+  tagEl.innerHTML=ALL_TAGS.map(t=>
+    '<button type="button" class="chip" data-k="tag" data-v="'+t+'" aria-pressed="false">'+t+'</button>'
+  ).join("");
+  const venEl=document.getElementById("venueChips");
+  venEl.innerHTML=ALL_VENUES.map(([id,name])=>
+    '<button type="button" class="chip" data-k="venue" data-v="'+id+'" aria-pressed="false">'+name+'</button>'
+  ).join("");
+  document.getElementById("filtersInner").addEventListener("click", ev=>{
+    const btn=ev.target.closest(".chip");
+    if(!btn) return;
+    toggleChip(btn.dataset.k, btn.dataset.v);
+  });
+}
+
+let filterAnim=null;
+function setFiltersOpen(next){
+  if(next===filtersOpen) return;
+  filtersOpen=next;
+  syncFilterToggle();
+  document.getElementById("tFilter").setAttribute("aria-expanded", next);
+  const panel=document.getElementById("filters");
+  panel.setAttribute("aria-hidden", next ? "false" : "true");
+  const inner=document.getElementById("filtersInner");
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(filterAnim){ try{ filterAnim.cancel(); }catch(e){} filterAnim=null; }
+  if(reduce){
+    panel.style.height = next ? "auto" : "0px";
+    return;
+  }
+  const from = next ? 0 : panel.offsetHeight;
+  const to = next ? inner.scrollHeight : 0;
+  panel.style.height = from+"px";
+  const ms=Math.round(Math.min(560, Math.max(240, Math.abs(to-from)/0.95)));
+  filterAnim=panel.animate(
+    [{height:from+"px"},{height:to+"px"}],
+    {duration:ms, easing:"linear", fill:"forwards"}
+  );
+  const finish=()=>{
+    try{ filterAnim.commitStyles(); filterAnim.cancel(); }catch(e){}
+    panel.style.height = next ? "auto" : "0px";
+    filterAnim=null;
+  };
+  filterAnim.finished.then(finish, finish);
+}
+
+function render(note){
+  const list=visible();
+  document.getElementById("count").innerHTML =
+    "<b>"+list.length+"</b> / "+EVENTS.length;
+  syncBinTools();
+  const r=document.getElementById("reading");
+  if(note!==undefined){ r.textContent=note||""; r.hidden=!note; }
+
+  const el=document.getElementById("list");
+  if(!list.length){ el.innerHTML='<div class="empty">Nothing here.</div>'; return; }
+
+  el.innerHTML=list.map(e=>{
+    const k=keyOf(e), s=(k in starred), b=(k in binned);
+    const when = e.first_date===e.last_date
+      ? fmt(e.first_date)
+      : fmt(e.first_date)+' <i>—</i> '+fmt(e.last_date);
+    const blurb = e.description
+      ? e.description.split(/\n\s*\n/).map(p=>'<p class="blurb">'+p+'</p>').join("")
+      : '<p class="blurb none">No description</p>';
+    const tags=(e.tags||[]).map(t=>'<span class="tag">'+t+'</span>').join('<span class="sep">·</span>');
+    const venue=e.venue_name+(tags?'<span class="sep">·</span>'+tags:'');
+    const byline = e.byline ? '<p class="byline">'+e.byline+'</p>' : '';
+    return '<article class="'+(b?'binned':'')+'">'+
+      '<div class="slot">'+
+      '<div class="when caps">'+when+'</div>'+
+      '<h2><a href="'+e.url+'" target="_blank" rel="noopener">'+e.title+'</a></h2>'+
+      '<div class="venue caps">'+venue+'</div>'+
+      byline+blurb+
+      '<div class="acts">'+
+        '<button class="act star" data-key="'+k+'" data-k="star" '+
+          'aria-pressed="'+s+'" aria-label="Star">'+SVG.star+'</button>'+
+        '<button class="act bin" data-key="'+k+'" data-k="bin" '+
+          'aria-pressed="'+b+'" aria-label="Bin">'+SVG.bin+'</button>'+
+      '</div></div></article>';
+  }).join("");
+
+  const byKey=Object.fromEntries(list.map(e=>[keyOf(e),e]));
+  el.querySelectorAll(".act").forEach(btn=>{
+    btn.onclick=()=>{
+      const k=btn.dataset.key, e=byKey[k];
+      if(btn.dataset.k==="star"){
+        if(k in starred) delete starred[k];
+        else { starred[k]=meta(e); delete binned[k]; }
+      } else {
+        if(k in binned) delete binned[k];
+        else { binned[k]=meta(e); delete starred[k]; }
+      }
+      persist();
+      if(visible().some(x=>keyOf(x)===k)) render();
+      else {
+        const article=btn.closest("article");
+        if(k in binned){
+          article.classList.add("binned");
+          const bin=article.querySelector(".act.bin");
+          if(bin) bin.setAttribute("aria-pressed","true");
+        }
+        recount();
+        foldAway(article);
+      }
+    };
+  });
+}
+
+function setMode(next){
+  mode=(mode===next)?"all":next;
+  document.getElementById("tStar").setAttribute("aria-pressed",mode==="starred");
+  document.getElementById("tBin").setAttribute("aria-pressed",mode==="binned");
+  render();
+}
+document.getElementById("tStar").onclick=()=>setMode("starred");
+document.getElementById("tBin").onclick=()=>setMode("binned");
+document.getElementById("tFilter").onclick=()=>setFiltersOpen(!filtersOpen);
+document.getElementById("fReset").onclick=resetFilters;
+document.getElementById("restoreAll").onclick=restoreAll;
+
+function onRangeInput(which){
+  let a=+document.getElementById("rFrom").value;
+  let b=+document.getElementById("rTo").value;
+  if(which==="from" && a>b) a=b;
+  if(which==="to" && b<a) b=a;
+  filters.from=idxToIso(a);
+  filters.to=idxToIso(b);
+  syncRange();
+  applyFilters();
+}
+document.getElementById("rFrom").addEventListener("input",()=>onRangeInput("from"));
+document.getElementById("rTo").addEventListener("input",()=>onRangeInput("to"));
+
+const HINTS=[
+  "political one-woman show",
+  "spooky ghost story with handmade puppets, for adults",
+  "in East London",
+  "Dance with contemporary music and choreography",
+];
+let asking=false;
+
+function syncAsk(){
+  const empty=!document.getElementById("q").value.trim();
+  const btn=document.getElementById("go");
+  btn.disabled=asking||empty;
+  btn.classList.toggle("busy", asking);
+  btn.setAttribute("aria-busy", asking?"true":"false");
+}
+
+function startHints(){
+  const q=document.getElementById("q");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    q.placeholder=HINTS[0];
+    return;
+  }
+  let i=0, pos=0, phase="type", paused=false;
+  const step=()=>{
+    if(q.value){
+      q.placeholder="";
+      paused=true;
+      setTimeout(step, 400);
+      return;
+    }
+    if(paused){
+      paused=false;
+      pos=0;
+      phase="type";
+      i=(i+1)%HINTS.length;
+    }
+    const text=HINTS[i];
+    if(phase==="type"){
+      pos++;
+      q.placeholder=text.slice(0,pos);
+      if(pos>=text.length){ phase="hold"; setTimeout(step, 1000); return; }
+      setTimeout(step, 42);
+      return;
+    }
+    if(phase==="hold"){
+      phase="delete";
+      setTimeout(step, 28);
+      return;
+    }
+    if(phase==="delete"){
+      pos--;
+      q.placeholder=text.slice(0, pos);
+      if(pos<=0){
+        phase="gap";
+        i=(i+1)%HINTS.length;
+        setTimeout(step, 380);
+        return;
+      }
+      setTimeout(step, 28);
+      return;
+    }
+    phase="type";
+    setTimeout(step, 42);
+  };
+  step();
+}
+
+async function ask(){
+  const q=document.getElementById("q").value.trim();
+  if(!q||asking){
+    if(!q){ subset=null; render(""); }
+    return;
+  }
+  asking=true; syncAsk();
+  try{
+    const res=await fetch("/api/search?"+new URLSearchParams({q, limit:"60"}));
+    if(!res.ok) throw new Error("search "+res.status);
+    const data=await res.json();
+    subset=data.ids||[];
+    render("");
+  }catch(err){
+    console.warn(err);
+    subset=null;
+    render("Search didn't respond.");
+  }finally{ asking=false; syncAsk(); }
+}
+document.getElementById("go").onclick=ask;
+document.getElementById("q").addEventListener("input", syncAsk);
+document.getElementById("q").addEventListener("keydown",e=>{
+  if(e.key==="Enter") ask();
+});
+
+function applyTodayStart(){
+  const s=dateSpan();
+  if(filters.from===s.min && filters.to<=s.max && filters.to>=s.min) return;
+  filters.from=s.min;
+  if(filters.to<s.min) filters.to=s.min;
+  if(filters.to>s.max) filters.to=s.max;
+  syncFilterUI();
+  persist();
+  render();
+}
+function scheduleDayRollover(){
+  const n=new Date();
+  const next=new Date(n.getFullYear(), n.getMonth(), n.getDate()+1);
+  setTimeout(()=>{
+    applyTodayStart();
+    scheduleDayRollover();
+  }, Math.max(1000, next-n+50));
+}
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="visible" && filters.from<dateSpan().min)
+    applyTodayStart();
+});
+
+(async()=>{
+  buildChips();
+  await load();
+  EVENTS.splice(0, EVENTS.length, ...weightedShuffle(EVENTS));
+  syncFilterUI();
+  persist();
+  render("");
+  syncAsk();
+  startHints();
+  scheduleDayRollover();
+})();
+
+(function(){
+  const el=document.getElementById("splash");
+  if(!el) return;
+  const hide=()=>{
+    el.classList.add("out");
+    const done=()=>el.remove();
+    el.addEventListener("transitionend", done, {once:true});
+    setTimeout(done, 500);
+  };
+  setTimeout(hide, 1000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+# Five working venues, for quick test runs (`validate.py` default).
+
+venues:
+- id: arcola
+  name: Arcola Theatre
+  location:
+    area: Dalston
+  whats_on_url: "https://www.arcolatheatre.com/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  require_space: true
+  selectors:
+    show_card: ".listing-item"
+    title: h3
+    dates: ".card__dates"
+    space: ".card__venue"
+    link: "a[href*='/event/']"
+  notes: Listing mixes workshops with productions — drop rows with no Studio 1/2 value.
+
+- id: southwark-playhouse
+  name: Southwark Playhouse
+  location:
+    area: Borough
+  whats_on_url: "https://southwarkplayhouse.co.uk/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".wpgb-card-wrapper"
+    title: ".wpgb-block-1"
+    dates: ".wpgb-block-3"
+    space: ".wpgb-block-7"
+    credits: ".wpgb-block-2"
+    link: a.wpgb-card-layer-link
+  notes: >
+    Homepage is the listings page. Stage-2 pages carry full pricing tiers, running time,
+    content warnings.
+
+- id: wiltons
+  name: "Wilton's Music Hall"
+  location:
+    area: Shadwell
+  whats_on_url: "https://wiltons.org.uk/whats-on/"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".WhatsonItem"
+    title: h3
+    dates: ".EV_ListDate"
+    link: "a[href*='/whats-on/']"
+
+- id: camden-peoples-theatre
+  name: "Camden People's Theatre"
+  location:
+    area: Euston
+  whats_on_url: "https://cptheatre.co.uk/Whats-On"
+  fetch_method: static
+  strategy: selectors
+  selectors:
+    show_card: ".event.subs"
+    title: h3.evtit
+    dates: ".edate"
+    credits: ".prods"
+    blurb: ".etext"
+    blurb_strip: "h3, .edate, .prods"
+    tags: ".tags a"
+    link: h3.evtit a
+  notes: >
+    Highest volume on the list (~23 events per 8 weeks, mostly one-nighters). Cap picks
+    per venue in the digest. URL SLUGS TAKE NO TRAILING SLASH (/whatson/Roadside, not
+    /whatson/Roadside/) — verified against live links. Slugs are literal and
+    case-sensitive, and some carry a trailing hyphen (Like-a-Rat-).
+
+- id: the-yard
+  name: The Yard Theatre
+  location:
+    area: Hackney Wick
+  whats_on_url: "https://www.theyardtheatre.co.uk/whats-on"
+  fetch_method: js_rendered
+  strategy: sanity
+  show_url_pattern: "https://www.theyardtheatre.co.uk/events/{slug}"
+  sanity:
+    project_id: vs3yf10f
+    dataset: production
+    api_version: "2021-10-21"
+  notes: >
+    Next.js App Router (no __NEXT_DATA__). Listings come from the public Sanity dataset.
+    Don't reach for a headless browser.

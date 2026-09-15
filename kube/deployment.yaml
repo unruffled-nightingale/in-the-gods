@@ -1,0 +1,30 @@
+apiVersion: apps/v1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: inthegods
+  namespace: default
+  labels:
+    app: inthegods
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inthegods
+  template:
+    metadata:
+      labels:
+        app: inthegods
+    spec:
+      containers:
+        - name: inthegods
+          image: unrufflednightingale/inthegods:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: inthegods
+                  key: ANTHROPIC_API_KEY
+                  optional: true

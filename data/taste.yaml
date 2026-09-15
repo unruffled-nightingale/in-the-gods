@@ -1,0 +1,59 @@
+# Post-fetch refine. Edit this; the cache key includes it, so a change
+# re-asks Haiku about every show.
+
+model: claude-haiku-4-5
+batch_size: 20
+# Judgements not seen in a full run for this long leave the cache.
+cache_prune_weeks: 12
+
+# Form tags the model may assign. film and sport are omitted on purpose:
+# those are drop verdicts, not tags we keep.
+allowed_tags:
+  - theatre
+  - musical
+  - stand-up
+  - comedy
+  - concert
+  - opera
+  - dance
+  - circus
+  - immersive
+  - puppetry
+  - cabaret
+  - magic
+  - spoken-word
+  - talk
+  - class
+  - social
+  - exhibition
+
+drop: |
+  Drop cinema screenings, NT Live / NT at Home streams, filmed captures of
+  past shows, and "a screening of X" with no live performers.
+
+  Drop sport: matches, ice hockey, basketball, races, fitness.
+
+  Drop sport-adjacent classes: yoga, pilates, gym, Zumba, stretching,
+  wellbeing movement that is not a performance.
+
+  A play, comedy or dance piece ABOUT yoga (or sport, or film) is a keep.
+  Live score to a silent film is a keep (concert / theatre), not a drop.
+  A playwriting workshop or letterpress class is a keep, tagged class.
+
+  Drop listings whose title and copy are not in English. The audience reads
+  this page in English. A play performed in another language is a keep if
+  the listing itself is in English. An Italian opera title with an English
+  synopsis is a keep. A Turkish, French, or other-language listing with no
+  English copy is a drop.
+
+interests: |
+  Star the weird end of the programme: puppetry, live art, devised work,
+  formally strange staging, spooky, contemporary circus, small-scale new
+  writing, odd cabaret.
+
+  Star immersive only when it is actually theatre or live art, not a branded
+  maze, cocktail trail or IP experience.
+
+  Do not star: tribute nights, jukebox / well-known musicals unless the
+  staging is genuinely unusual, standard stand-up bills, West End transfers,
+  kids' yoga, wellness, sports, screenings.

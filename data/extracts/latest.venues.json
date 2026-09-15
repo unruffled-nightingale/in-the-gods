@@ -1,0 +1,390 @@
+{
+"almeida": {
+"name": "Almeida Theatre",
+"area": "Islington"
+},
+"young-vic": {
+"name": "Young Vic",
+"area": "South Bank"
+},
+"donmar": {
+"name": "Donmar Warehouse",
+"area": "Covent Garden"
+},
+"royal-court": {
+"name": "Royal Court",
+"area": "Sloane Square"
+},
+"bush": {
+"name": "Bush Theatre",
+"area": "Shepherd's Bush"
+},
+"hampstead": {
+"name": "Hampstead Theatre",
+"area": "Swiss Cottage"
+},
+"kiln": {
+"name": "Kiln Theatre",
+"area": "Kilburn"
+},
+"lyric-hammersmith": {
+"name": "Lyric Hammersmith",
+"area": "Hammersmith"
+},
+"orange-tree": {
+"name": "Orange Tree",
+"area": "Richmond"
+},
+"soho-theatre": {
+"name": "Soho Theatre",
+"area": "Soho"
+},
+"park-theatre": {
+"name": "Park Theatre",
+"area": "Finsbury Park"
+},
+"hackney-empire": {
+"name": "Hackney Empire",
+"area": "Hackney"
+},
+"stratford-east": {
+"name": "Theatre Royal Stratford East",
+"area": "Stratford"
+},
+"coronet": {
+"name": "The Coronet Theatre",
+"area": "Notting Hill"
+},
+"menier": {
+"name": "Menier Chocolate Factory",
+"area": "Southwark"
+},
+"barbican": {
+"name": "Barbican Centre",
+"area": "Barbican"
+},
+"national-theatre": {
+"name": "National Theatre",
+"area": "South Bank"
+},
+"bac": {
+"name": "Battersea Arts Centre",
+"area": "Battersea"
+},
+"the-yard": {
+"name": "The Yard",
+"area": "Hackney Wick, E9"
+},
+"camden-peoples-theatre": {
+"name": "Camden People's Theatre",
+"area": "Euston, NW1"
+},
+"chisenhale-dance": {
+"name": "Chisenhale Dance Space",
+"area": "Bow"
+},
+"shoreditch-town-hall": {
+"name": "Shoreditch Town Hall",
+"area": "Shoreditch"
+},
+"new-diorama": {
+"name": "New Diorama Theatre",
+"area": "Regent's Place"
+},
+"rich-mix": {
+"name": "Rich Mix",
+"area": "Shoreditch"
+},
+"wiltons": {
+"name": "Wilton's Music Hall",
+"area": "Shadwell, E1"
+},
+"hoxton-hall": {
+"name": "Hoxton Hall",
+"area": "Hoxton"
+},
+"punchdrunk": {
+"name": "Punchdrunk",
+"area": "Woolwich"
+},
+"woolwich-works": {
+"name": "Woolwich Works",
+"area": "Woolwich"
+},
+"sadlers-wells": {
+"name": "Sadler's Wells",
+"area": "Angel"
+},
+"the-place": {
+"name": "The Place",
+"area": "Euston"
+},
+"ica": {
+"name": "ICA",
+"area": "The Mall"
+},
+"little-angel": {
+"name": "Little Angel Theatre",
+"area": "Islington"
+},
+"puppet-barge": {
+"name": "Puppet Theatre Barge",
+"area": "Little Venice"
+},
+"brixton-house": {
+"name": "Brixton House",
+"area": "Brixton"
+},
+"omnibus": {
+"name": "Omnibus Theatre",
+"area": "Clapham"
+},
+"the-albany": {
+"name": "The Albany",
+"area": "Deptford"
+},
+"greenwich-theatre": {
+"name": "Greenwich Theatre",
+"area": "Greenwich"
+},
+"southwark-playhouse": {
+"name": "Southwark Playhouse",
+"area": "Borough, SE1"
+},
+"arcola": {
+"name": "Arcola Theatre",
+"area": "Dalston, E8"
+},
+"marylebone-theatre": {
+"name": "Marylebone Theatre",
+"area": "Marylebone"
+},
+"riverside-studios": {
+"name": "Riverside Studios",
+"area": "Hammersmith"
+},
+"the-cockpit": {
+"name": "The Cockpit",
+"area": "Marylebone"
+},
+"artsdepot": {
+"name": "artsdepot",
+"area": "North Finchley"
+},
+"chickenshed": {
+"name": "Chickenshed",
+"area": "Southgate"
+},
+"alexandra-palace": {
+"name": "Alexandra Palace Theatre",
+"area": "Wood Green"
+},
+"kings-head": {
+"name": "King's Head Theatre",
+"area": "Islington"
+},
+"hope-theatre": {
+"name": "The Hope Theatre",
+"area": "Islington"
+},
+"pleasance-islington": {
+"name": "Pleasance Islington",
+"area": "Caledonian Road"
+},
+"etcetera": {
+"name": "Etcetera Theatre",
+"area": "Camden Town"
+},
+"upstairs-gatehouse": {
+"name": "Upstairs at the Gatehouse",
+"area": "Highgate"
+},
+"tabernacle": {
+"name": "The Tabernacle",
+"area": "Notting Hill"
+},
+"finborough": {
+"name": "Finborough Theatre",
+"area": "Earl's Court"
+},
+"jermyn-street": {
+"name": "Jermyn Street Theatre",
+"area": "St James's"
+},
+"drayton-arms": {
+"name": "Drayton Arms Theatre",
+"area": "South Kensington"
+},
+"canal-cafe": {
+"name": "Canal Café Theatre",
+"area": "Little Venice"
+},
+"museum-of-comedy": {
+"name": "Museum of Comedy",
+"area": "Bloomsbury"
+},
+"underbelly-boulevard": {
+"name": "Underbelly Boulevard",
+"area": "Soho"
+},
+"bridewell": {
+"name": "Bridewell Theatre",
+"area": "Blackfriars"
+},
+"courtyard": {
+"name": "The Courtyard Theatre",
+"area": "Hoxton"
+},
+"playground-theatre": {
+"name": "The Playground Theatre",
+"area": "North Kensington"
+},
+"theatre503": {
+"name": "Theatre503",
+"area": "Battersea"
+},
+"white-bear": {
+"name": "White Bear Theatre",
+"area": "Kennington"
+},
+"golden-goose": {
+"name": "Golden Goose Theatre",
+"area": "Camberwell"
+},
+"brockley-jack": {
+"name": "Brockley Jack Studio",
+"area": "Crofton Park"
+},
+"bridge-house": {
+"name": "The Bridge House Theatre",
+"area": "Penge"
+},
+"piehouse": {
+"name": "Piehouse Co-op",
+"area": "Deptford"
+},
+"union-theatre": {
+"name": "Union Theatre",
+"area": "Southwark"
+},
+"oso-arts": {
+"name": "OSO Arts Centre",
+"area": "Barnes"
+},
+"the-space": {
+"name": "The Space",
+"area": "Isle of Dogs"
+},
+"half-moon": {
+"name": "Half Moon Theatre",
+"area": "Limehouse"
+},
+"cafe-oto": {
+"name": "Café OTO",
+"area": "Dalston"
+},
+"the-glitch": {
+"name": "The Glitch",
+"area": "Waterloo"
+},
+"stone-nest": {
+"name": "Stone Nest",
+"area": "Soho"
+},
+"tate-modern": {
+"name": "Tate Modern",
+"area": "Bankside"
+},
+"bethnal-green-wmc": {
+"name": "Bethnal Green Working Men's Club",
+"area": "Bethnal Green"
+},
+"royal-vauxhall-tavern": {
+"name": "Royal Vauxhall Tavern",
+"area": "Vauxhall"
+},
+"hen-and-chickens": {
+"name": "Hen & Chickens Theatre",
+"area": "Islington"
+},
+"tabard": {
+"name": "Tabard Theatre",
+"area": "Chiswick"
+},
+"old-vic": {
+"name": "The Old Vic",
+"area": "Waterloo"
+},
+"shakespeares-globe": {
+"name": "Shakespeare's Globe",
+"area": "Bankside"
+},
+"regents-park": {
+"name": "Regent's Park Open Air Theatre",
+"area": "Regent's Park"
+},
+"bridge-theatre": {
+"name": "Bridge Theatre",
+"area": "London Bridge"
+},
+"roundhouse": {
+"name": "Roundhouse",
+"area": "Chalk Farm"
+},
+"southbank-centre": {
+"name": "Southbank Centre",
+"area": "South Bank"
+},
+"royal-ballet-opera": {
+"name": "Royal Ballet and Opera",
+"area": "Covent Garden"
+},
+"london-coliseum": {
+"name": "London Coliseum",
+"area": "St Martin's Lane"
+},
+"eno": {
+"name": "English National Opera",
+"area": "St Martin's Lane"
+},
+"sohoplace": {
+"name": "@sohoplace",
+"area": "Soho"
+},
+"troubadour": {
+"name": "Troubadour Theatres",
+"area": "Wembley Park"
+},
+"jacksons-lane": {
+"name": "Jacksons Lane",
+"area": "Highgate"
+},
+"barons-court": {
+"name": "Barons Court Theatre",
+"area": "Barons Court"
+},
+"unicorn": {
+"name": "Unicorn Theatre",
+"area": "London Bridge"
+},
+"polka": {
+"name": "Polka Theatre",
+"area": "Wimbledon"
+},
+"vfd": {
+"name": "VFD",
+"area": "Dalston"
+},
+"siobhan-davies": {
+"name": "Siobhan Davies Studios",
+"area": "Elephant and Castle"
+},
+"immersive-rumours": {
+"name": "Immersive Rumours",
+"area": "London"
+},
+"home": {
+"name": "HOME",
+"area": "At home"
+}
+}

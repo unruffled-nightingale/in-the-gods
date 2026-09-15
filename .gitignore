@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.cache/
+.playwright/
+.DS_Store
+.pytest_cache/
+.env
+kube/secret.yaml
+
+# crawler / probe scratch — live in .cache/ now, ignore leftovers in data/
+data/raw.json
+data/onboard.yaml
+data/probe_results.json
+data/probe_validation.json
+data/url_map.json

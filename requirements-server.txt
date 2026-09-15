@@ -1,0 +1,6 @@
+fastapi>=0.115
+uvicorn[standard]>=0.32
+fastmcp>=4.0
+numpy>=2.0
+fastembed>=0.4
+anthropic>=0.40

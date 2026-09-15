@@ -1,0 +1,16 @@
+# pipeline
+requests>=2.31
+beautifulsoup4>=4.12
+lxml>=5.0
+PyYAML>=6.0
+playwright>=1.48
+
+# tests
+pytest>=8.0
+
+# post-fetch refine (skipped when ANTHROPIC_API_KEY is unset)
+anthropic>=0.40
+
+# embeddings (same model the server uses at query time)
+numpy>=2.0
+fastembed>=0.4
