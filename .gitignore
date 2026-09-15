@@ -7,7 +7,6 @@ venv/
 .DS_Store
 .pytest_cache/
 .env
-kube/secret.yaml
 
 # crawler / probe scratch — live in .cache/ now, ignore leftovers in data/
 data/raw.json
