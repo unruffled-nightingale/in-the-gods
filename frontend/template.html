@@ -254,18 +254,21 @@
   }
 
   @media (max-width:600px){
-    body{font-size:18px; padding:20px 18px 96px 22px}
+    /* the desktop greys read as washed out on a phone screen */
+    :root{--ink-soft:#3A3730; --mute:#6D675E}
+    body{font-size:19px; padding:20px 18px 96px 22px}
     .slot{padding:32px 0 28px}
     h2{max-width:none}
 
-    .caps{font-size:11px}
+    .caps{font-size:11.5px}
     .ask input{font-size:18px; padding:16px 0 10px}
     .ask button{font-size:11px; padding:16px 0 10px 18px}
     .reading{font-size:17px}
-    .byline{font-size:15px}
-    .blurb{font-size:16px}
+    /* 300 is too thin to hold up at this size on a phone */
+    .byline{font-size:16px; font-weight:400}
+    .blurb{font-size:17px; font-weight:400; line-height:1.66}
     .blurb.none{font-size:11px}
-    .why{font-size:15.5px}
+    .why{font-size:16px; font-weight:400}
     .range-labels{font-size:15px}
     .chip{font-size:11px; padding:10px 14px}
     .reset{font-size:11px}
