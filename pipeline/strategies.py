@@ -54,10 +54,11 @@ def extract_auto(venue, use_cache=True):
 
 
 def extract_jsonld(venue, use_cache=True):
-    from fetch import jsonld_events, polite_get, parse_date_range
+    from fetch import (LISTING_MAX_AGE, jsonld_events, polite_get,
+                       parse_date_range)
 
     url = venue["whats_on_url"]
-    soup = BeautifulSoup(polite_get(url, use_cache), "html.parser")
+    soup = BeautifulSoup(polite_get(url, use_cache, max_age=LISTING_MAX_AGE), "html.parser")
     rows = []
     for e in jsonld_events(soup):
         start = (e.get("startDate") or "")[:10] or None
@@ -85,10 +86,10 @@ def extract_dated_clusters(venue, use_cache=True):
     The date, the title and the show-page link *are* in the same small
     subtree — walk up from the date until that subtree appears.
     """
-    from fetch import polite_get, parse_date_range
+    from fetch import LISTING_MAX_AGE, polite_get, parse_date_range
 
     url = venue["whats_on_url"]
-    soup = BeautifulSoup(polite_get(url, use_cache), "html.parser")
+    soup = BeautifulSoup(polite_get(url, use_cache, max_age=LISTING_MAX_AGE), "html.parser")
     rows, seen = [], set()
 
     for el in soup.find_all(["p", "h2", "h3", "h4", "h5", "span", "time", "div"]):
@@ -207,10 +208,10 @@ def _smallest_show_cluster(date_el):
 
 
 def extract_selectors(venue, use_cache=True):
-    from fetch import polite_get, parse_date_range
+    from fetch import LISTING_MAX_AGE, polite_get, parse_date_range
 
     url = venue["whats_on_url"]
-    soup = BeautifulSoup(polite_get(url, use_cache), "html.parser")
+    soup = BeautifulSoup(polite_get(url, use_cache, max_age=LISTING_MAX_AGE), "html.parser")
     sel = venue.get("selectors") or {}
     card_sel = sel.get("show_card")
     if not card_sel:
@@ -263,7 +264,7 @@ def extract_wp_rest(venue, use_cache=True):
     Useful when the CPT is public. Performance dates are often *not* in the
     collection — those still need stage 2 or selectors.
     """
-    from fetch import polite_get, parse_date_range
+    from fetch import LISTING_MAX_AGE, polite_get, parse_date_range
 
     cfg = venue.get("wp_rest") or {}
     endpoint = cfg.get("endpoint")
@@ -271,7 +272,7 @@ def extract_wp_rest(venue, use_cache=True):
         return []
     per_page = int(cfg.get("per_page") or 50)
     url = f"{endpoint}{'&' if '?' in endpoint else '?'}per_page={per_page}"
-    data = json.loads(polite_get(url, use_cache))
+    data = json.loads(polite_get(url, use_cache, max_age=LISTING_MAX_AGE))
     if not isinstance(data, list):
         return []
 
@@ -296,7 +297,7 @@ def extract_wp_rest(venue, use_cache=True):
 
 def extract_sanity(venue, use_cache=True):
     """GROQ query against a public Sanity dataset. Used by The Yard."""
-    from fetch import polite_get
+    from fetch import LISTING_MAX_AGE, polite_get
 
     cfg = venue.get("sanity") or {}
     project = cfg.get("project_id")
@@ -311,7 +312,7 @@ def extract_sanity(venue, use_cache=True):
 
     api = (f"https://{project}.api.sanity.io/v{api_ver}/data/query/{dataset}"
            f"?query={quote(query)}")
-    payload = json.loads(polite_get(api, use_cache))
+    payload = json.loads(polite_get(api, use_cache, max_age=LISTING_MAX_AGE))
     result = payload.get("result") or []
 
     pattern = venue.get("show_url_pattern") or (venue.get("whats_on_url", "").rstrip("/") + "/{slug}")
@@ -422,10 +423,10 @@ def extract_immersive_rumours(venue, use_cache=True):
     (and WhatsApp) rows are tagged venue_id=home so In the Gods shows HOME.
     """
     from datetime import date, timedelta
-    from fetch import polite_get, parse_date_range
+    from fetch import LISTING_MAX_AGE, polite_get, parse_date_range
 
     url = venue["whats_on_url"]
-    soup = BeautifulSoup(polite_get(url, use_cache), "html.parser")
+    soup = BeautifulSoup(polite_get(url, use_cache, max_age=LISTING_MAX_AGE), "html.parser")
     today = date.today()
     section = "london"
     rows = []

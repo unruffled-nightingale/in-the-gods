@@ -28,12 +28,21 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
+# Kinsta and friends 403 any UA advertising a browser this far out of date,
+# so this needs bumping when it drifts. Two-part versions look fake: real
+# Chrome sends four.
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/122.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
 HEADERS = {"User-Agent": UA, "Accept-Language": "en-GB,en;q=0.9"}
 CACHE = Path(".cache/http")   # matches the actions/cache path in fetch.yml
 DELAY = 1.5          # seconds between requests to the same host
 TIMEOUT = 25
+
+# A listing page that never expires will happily replay a dead venue's shows
+# for weeks, so those are refetched every run. Show pages are written once and
+# rarely touched again, which is where the cache actually earns its keep.
+LISTING_MAX_AGE = 12 * 3600
+DETAIL_MAX_AGE = 30 * 86400
 
 
 # --------------------------------------------------------------------------- #
@@ -64,20 +73,22 @@ def render_for(venue):
     return _cm()
 
 
-def polite_get(url, use_cache=True, render=None):
+def polite_get(url, use_cache=True, render=None, max_age=DETAIL_MAX_AGE):
     """GET with on-disk cache and per-host rate limiting.
 
     `render=True` (or a venue inside render_for()) fetches the page through
     Chromium so JavaScript-built listings actually exist in the HTML. The
     cache key is different, so an empty shell from a plain GET cannot be
     reused as a rendered page.
+
+    `max_age` is how many seconds a cached copy stays usable.
     """
     CACHE.mkdir(parents=True, exist_ok=True)
     opts = _render_opts.get()
     do_render = bool(opts) if render is None else render
     suffix = ".rendered.html" if do_render else ".html"
     key = CACHE / (hashlib.sha1(url.encode()).hexdigest() + suffix)
-    if use_cache and key.exists():
+    if use_cache and key.exists() and time.time() - key.stat().st_mtime < max_age:
         return key.read_text(encoding="utf-8", errors="replace")
 
     host = requests.utils.urlparse(url).netloc

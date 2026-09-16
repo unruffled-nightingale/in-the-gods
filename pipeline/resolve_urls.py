@@ -21,8 +21,11 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
+# Kinsta and friends 403 any UA advertising a browser this far out of date,
+# so this needs bumping when it drifts. Two-part versions look fake: real
+# Chrome sends four.
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/122.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
 HEADERS = {"User-Agent": UA, "Accept-Language": "en-GB,en;q=0.9"}
 TIMEOUT = 20
 

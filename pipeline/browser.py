@@ -18,8 +18,11 @@ _LOCAL_BROWSERS = Path(__file__).resolve().parents[1] / ".playwright"
 if _LOCAL_BROWSERS.is_dir() and "PLAYWRIGHT_BROWSERS_PATH" not in os.environ:
     os.environ["PLAYWRIGHT_BROWSERS_PATH"] = str(_LOCAL_BROWSERS)
 
+# Kinsta and friends 403 any UA advertising a browser this far out of date,
+# so this needs bumping when it drifts. Two-part versions look fake: real
+# Chrome sends four.
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/122.0 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
 
 # Cloudflare, TicketSource and similar bot-walls.
 _CHALLENGE = re.compile(

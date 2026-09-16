@@ -35,7 +35,7 @@ jobs:
       # Cache fetched pages between runs. Most listings pages are
       # unchanged week to week, so this is the difference between
       # being a polite visitor and being a nuisance.
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: .cache/http
           key: http-${{ github.run_id }}
@@ -45,6 +45,15 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: make recollect WEEKS="${{ github.event.inputs.weeks || 8 }}" PYTHON=python
+
+      # Saved separately, and always: a one-line failure downstream should not
+      # throw away an hour of politely fetched pages.
+      - name: Save fetched pages
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/http
+          key: http-${{ github.run_id }}
 
       # `generated` and `window` move every run, so a plain `git diff`
       # would commit noise forever. Compare the events only.

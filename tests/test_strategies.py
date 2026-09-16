@@ -33,7 +33,7 @@ def test_cpt_selectors_get_blurb_tags_and_dates(tmp_path, monkeypatch):
     cache = tmp_path / "page.html"
     cache.write_text(CPT_CARD)
 
-    def fake_get(url, use_cache=True):
+    def fake_get(url, use_cache=True, **kw):
         return CPT_CARD
 
     monkeypatch.setattr("fetch.polite_get", fake_get)
@@ -83,7 +83,7 @@ MIXED_HOUSE = """
 
 
 def test_space_allow_keeps_only_the_venues_own_rooms(monkeypatch):
-    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True: MIXED_HOUSE)
+    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True, **kw: MIXED_HOUSE)
     venue = {
         "whats_on_url": "https://www.nationaltheatre.org.uk/whats-on/",
         "selectors": {
@@ -112,7 +112,7 @@ TOURING = """
 
 def test_exclude_drops_the_overseas_productions(monkeypatch):
     """A company's own site lists every city. Matched on title and url."""
-    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True: TOURING)
+    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True, **kw: TOURING)
     venue = {
         "whats_on_url": "https://www.punchdrunk.com/whats-on/",
         "selectors": {
@@ -175,7 +175,7 @@ def test_dated_clusters_pair_a_wix_date_with_its_heading():
     """
     venue = {"whats_on_url": "https://www.thehopetheatre.com/what-s-on"}
 
-    def fake_get(url, use_cache=True):
+    def fake_get(url, use_cache=True, **kw):
         return html
 
     import fetch
@@ -219,7 +219,7 @@ def test_dated_clusters_prefer_the_title_matching_link():
     venue = {"whats_on_url": "https://www.whitebeartheatre.co.uk/whatson"}
     import fetch
     orig = fetch.polite_get
-    fetch.polite_get = lambda url, use_cache=True: html
+    fetch.polite_get = lambda url, use_cache=True, **kw: html
     try:
         rows = extract_dated_clusters(venue)
     finally:
@@ -256,7 +256,7 @@ YOUNG_VIC = """
 
 
 def test_young_vic_reads_cards_and_festival_billboard(monkeypatch):
-    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True: YOUNG_VIC)
+    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True, **kw: YOUNG_VIC)
     venue = {
         "whats_on_url": "https://www.youngvic.org/whats-on/",
         "selectors": {
@@ -302,7 +302,7 @@ JACKSONS_LANE = """
 
 
 def test_jacksons_lane_all_performances_cards(monkeypatch):
-    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True: JACKSONS_LANE)
+    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True, **kw: JACKSONS_LANE)
     venue = {
         "whats_on_url": "https://www.jacksonslane.org.uk/whats-on/all-performances/",
         "selectors": {
@@ -356,7 +356,7 @@ RUMOURS = """
 
 def test_immersive_rumours_splits_home_and_skips_outside(monkeypatch):
     from strategies import extract_immersive_rumours
-    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True: RUMOURS)
+    monkeypatch.setattr("fetch.polite_get", lambda url, use_cache=True, **kw: RUMOURS)
     rows = extract_immersive_rumours({
         "whats_on_url": "https://www.immersiverumours.com/current-shows-london",
     })
