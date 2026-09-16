@@ -37,6 +37,11 @@ _play = None
 _browser = None
 _ctx = None
 
+# A CI runner is slower than a laptop, and this ceiling is only ever reached by
+# a page that is already failing: wait_for_selector returns the moment the
+# listing appears, so a patient limit costs a healthy venue nothing.
+RENDER_TIMEOUT_MS = 45000
+
 # Playwright's bundled Chromium is what CI installs. Dev machines often
 # only have Google Chrome, and recent Playwright looks for
 # chrome-headless-shell which `playwright install chromium` may not have
@@ -140,8 +145,17 @@ def _dismiss_cookies(page):
             continue
 
 
-def rendered_get(url, wait_for=None, timeout_ms=25000):
-    """Navigate, wait out a challenge if there is one, return the DOM."""
+class RenderWaitTimeout(RuntimeError):
+    """A venue's listing selector never appeared, so the DOM is unfinished."""
+
+
+def rendered_get(url, wait_for=None, timeout_ms=RENDER_TIMEOUT_MS):
+    """Navigate, wait out a challenge if there is one, return the DOM.
+
+    Raises RenderWaitTimeout if `wait_for` never turns up. Returning the page
+    anyway reads as a venue with no shows, which is indistinguishable from a
+    venue that has closed, and polite_get would cache it either way.
+    """
     page = get_context().new_page()
     try:
         page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
@@ -150,9 +164,11 @@ def rendered_get(url, wait_for=None, timeout_ms=25000):
         while _still_challenging(html) and time.time() < deadline:
             page.wait_for_timeout(1000)
             html = page.content()
+        seen = False
         if wait_for:
             try:
                 page.wait_for_selector(wait_for, timeout=timeout_ms)
+                seen = True
             except Exception:                                 # noqa: BLE001
                 page.wait_for_timeout(2000)
         else:
@@ -161,11 +177,15 @@ def rendered_get(url, wait_for=None, timeout_ms=25000):
             except Exception:                                 # noqa: BLE001
                 page.wait_for_timeout(1500)
         _dismiss_cookies(page)
-        if wait_for:
+        if wait_for and not seen:
+            # A banner sitting over the listing can hold it back this long.
             try:
                 page.wait_for_selector(wait_for, timeout=8000)
+                seen = True
             except Exception:                                 # noqa: BLE001
                 pass
+        if wait_for and not seen:
+            raise RenderWaitTimeout(f"{wait_for!r} never appeared at {url}")
         return page.content()
     finally:
         page.close()

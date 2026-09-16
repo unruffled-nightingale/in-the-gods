@@ -39,8 +39,9 @@ venues:
   location:
     area: Covent Garden
   whats_on_url: "https://www.donmarwarehouse.com/whats-on/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".c-media--event"
   selectors:
     show_card: ".c-media--event"
     title: ".c-media__title"
@@ -52,8 +53,9 @@ venues:
   location:
     area: Sloane Square
   whats_on_url: "https://royalcourttheatre.com/whats-on/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".c-media--event"
   selectors:
     show_card: ".c-media--event"
     title: ".c-media__title"
@@ -266,8 +268,9 @@ venues:
   location:
     area: Euston
   whats_on_url: "https://cptheatre.co.uk/Whats-On"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".event.subs"
   selectors:
     show_card: ".event.subs"
     title: h3.evtit
@@ -325,8 +328,9 @@ venues:
   location:
     area: Shoreditch
   whats_on_url: "https://richmix.org.uk/live-events/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".c-card--event"
   selectors:
     show_card: ".c-card--event"
     title: ".c-card__title"
@@ -412,8 +416,9 @@ venues:
   location:
     area: Euston
   whats_on_url: "https://theplace.org.uk/whats-on/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: "a.c-event-card"
   selectors:
     show_card: a.c-event-card
     title: ".c-event-card__title"
@@ -633,8 +638,9 @@ venues:
   location:
     area: Wood Green
   whats_on_url: "https://www.alexandrapalace.com/theatre/whats-on/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".event_card:not(.past-event)"
   selectors:
     show_card: ".event_card:not(.past-event)"
     title: a.event_target
@@ -857,8 +863,9 @@ venues:
   location:
     area: Hoxton
   whats_on_url: "https://thecourtyard.org.uk/whats-on/"
-  fetch_method: static
+  fetch_method: rendered
   strategy: selectors
+  render_wait: ".card"
   selectors:
     show_card: ".card"
     title: h5.card-title
