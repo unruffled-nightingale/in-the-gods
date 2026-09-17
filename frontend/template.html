@@ -103,6 +103,7 @@
   .tog[aria-pressed=true] svg{stroke-width:1.5}
   .tog#tStar[aria-pressed=true] svg{fill:var(--claret)}
   .tog#tFilter[aria-pressed=true]{color:var(--claret)}
+  .tog#tFilter.has-filters{color:var(--claret)}
   .bar .n{color:var(--mute);font-size:12px}
   .bar .n b{color:var(--ink);font-weight:600}
   .reset{
@@ -119,7 +120,6 @@
   }
 
   /* ---------- filter panel ---------- */
-  #filters{overflow:hidden;height:0}
   .filters-inner{padding:4px 0 8px}
   .f-sec{padding:22px 0;border-top:1px solid var(--hair)}
   .f-sec:first-child{border-top:none;padding-top:10px}
@@ -332,13 +332,13 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-linecap="round"><path d="M3.6 6.4h16.8M9.4 6.4V4.2h5.2v2.2M6.2 6.4l1 13.4h9.6l1-13.4M10 10.2v6M14 10.2v6"/></svg>
   </button>
-  <button class="tog" id="tFilter" aria-pressed="false" aria-expanded="false" aria-label="Filters">
+  <button class="tog" id="tFilter" aria-pressed="false" aria-label="Search and filters">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
   </button>
   </div>
 </div>
-<div id="filters" aria-hidden="true">
+<div id="filters" hidden>
   <div class="filters-inner" id="filtersInner">
     <div class="f-sec f-actions">
       <button class="reset" id="fSearch">
@@ -452,8 +452,6 @@ function defaultFilters(){
   return {tags:[], venues:[], from:s.min, to:s.max};
 }
 let filters=defaultFilters();
-let filtersOpen=false;
-
 /* Stable key: venue + slugified title. Survives re-extraction, because
    array position does not. Value carries enough metadata that a starred
    show stays meaningful even after it drops out of the current feed. */
@@ -540,6 +538,10 @@ function persist(){
 }
 
 function visible(){
+  // Starred and binned are the reader's own two piles, shown whole: a date
+  // range left over from an earlier search should not hide what they saved.
+  if(mode==="starred") return EVENTS.filter(e=>keyOf(e) in starred);
+  if(mode==="binned") return EVENTS.filter(e=>keyOf(e) in binned);
   let l=EVENTS;
   if(filters.tags.length){
     const want=new Set(filters.tags);
@@ -554,10 +556,7 @@ function visible(){
     const have=new Map(l.map(e=>[e.id,e]));
     l=subset.map(id=>have.get(id)).filter(Boolean);
   }
-  if(mode==="starred") l=l.filter(e=>keyOf(e) in starred);
-  else if(mode==="binned") l=l.filter(e=>keyOf(e) in binned);
-  else l=l.filter(e=>!(keyOf(e) in binned));
-  return l;
+  return l.filter(e=>!(keyOf(e) in binned));
 }
 
 function filtersActive(){
@@ -566,14 +565,9 @@ function filtersActive(){
     filters.from!==d.from || filters.to!==d.to;
 }
 
-function syncFilterToggle(){
-  document.getElementById("tFilter").setAttribute("aria-pressed",
-    (filtersOpen || filtersActive()) ? "true" : "false");
-}
-
 function applyFilters(){
   persist();
-  syncFilterToggle();
+  syncMode();
   render();
 }
 
@@ -590,10 +584,7 @@ function restoreAll(){
   if(!Object.keys(binned).length) return;
   binned={};
   persist();
-  mode="all";
-  document.getElementById("tStar").setAttribute("aria-pressed","false");
-  document.getElementById("tBin").setAttribute("aria-pressed","false");
-  render();
+  setMode("all");
 }
 
 function syncBinTools(){
@@ -664,7 +655,7 @@ function syncChips(){
 function syncFilterUI(){
   syncRange();
   syncChips();
-  syncFilterToggle();
+  syncMode();
 }
 
 function toggleChip(kind, value){
@@ -689,37 +680,6 @@ function buildChips(){
     if(!btn) return;
     toggleChip(btn.dataset.k, btn.dataset.v);
   });
-}
-
-let filterAnim=null;
-function setFiltersOpen(next){
-  if(next===filtersOpen) return;
-  filtersOpen=next;
-  syncFilterToggle();
-  document.getElementById("tFilter").setAttribute("aria-expanded", next);
-  const panel=document.getElementById("filters");
-  panel.setAttribute("aria-hidden", next ? "false" : "true");
-  const inner=document.getElementById("filtersInner");
-  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(filterAnim){ try{ filterAnim.cancel(); }catch(e){} filterAnim=null; }
-  if(reduce){
-    panel.style.height = next ? "auto" : "0px";
-    return;
-  }
-  const from = next ? 0 : panel.offsetHeight;
-  const to = next ? inner.scrollHeight : 0;
-  panel.style.height = from+"px";
-  const ms=Math.round(Math.min(560, Math.max(240, Math.abs(to-from)/0.95)));
-  filterAnim=panel.animate(
-    [{height:from+"px"},{height:to+"px"}],
-    {duration:ms, easing:"linear", fill:"forwards"}
-  );
-  const finish=()=>{
-    try{ filterAnim.commitStyles(); filterAnim.cancel(); }catch(e){}
-    panel.style.height = next ? "auto" : "0px";
-    filterAnim=null;
-  };
-  filterAnim.finished.then(finish, finish);
 }
 
 function render(note){
@@ -785,15 +745,28 @@ function render(note){
   });
 }
 
-function setMode(next){
-  mode=(mode===next)?"all":next;
+// The three toggles are one control between them: each shows its own view and
+// clicking the lit one drops you back to the listings.
+function syncMode(){
   document.getElementById("tStar").setAttribute("aria-pressed",mode==="starred");
   document.getElementById("tBin").setAttribute("aria-pressed",mode==="binned");
+  document.getElementById("tFilter").setAttribute("aria-pressed",mode==="search");
+  // Filters stay lit on the way back so their effect on the count is not a
+  // mystery once the panel is out of sight.
+  document.getElementById("tFilter").classList.toggle(
+    "has-filters", mode!=="search" && filtersActive());
+  document.getElementById("filters").hidden = mode!=="search";
+  document.getElementById("list").hidden = mode==="search";
+}
+
+function setMode(next){
+  mode=next;
+  syncMode();
   render();
 }
-document.getElementById("tStar").onclick=()=>setMode("starred");
-document.getElementById("tBin").onclick=()=>setMode("binned");
-document.getElementById("tFilter").onclick=()=>setFiltersOpen(!filtersOpen);
+document.getElementById("tStar").onclick=()=>setMode(mode==="starred"?"all":"starred");
+document.getElementById("tBin").onclick=()=>setMode(mode==="binned"?"all":"binned");
+document.getElementById("tFilter").onclick=()=>setMode(mode==="search"?"all":"search");
 document.getElementById("fReset").onclick=resetFilters;
 document.getElementById("restoreAll").onclick=restoreAll;
 
@@ -904,7 +877,7 @@ async function searchAndClose(){
       btn.setAttribute("aria-busy","false");
     }
   }
-  setFiltersOpen(false);
+  setMode("all");
 }
 document.getElementById("fSearch").onclick=searchAndClose;
 document.getElementById("q").addEventListener("keydown",e=>{
