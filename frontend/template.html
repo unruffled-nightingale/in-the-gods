@@ -72,29 +72,15 @@
     color:#3F3C38; opacity:1;
     font-style:italic; font-weight:300;
   }
-  .ask input:focus,.ask input:focus-visible,.ask button:focus,.ask button:focus-visible{outline:none}
-  .ask button{
-    font-family:"Archivo",system-ui,sans-serif;
-    font-size:10px; font-weight:600; text-transform:uppercase;
-    letter-spacing:.2em; background:none; border:none; color:var(--ink);
-    padding:10px 0 10px 18px; cursor:pointer; transition:color .2s;
-    display:flex; align-items:center; justify-content:flex-end;
-    min-width:4.4em;
-  }
-  .ask button:hover{color:var(--claret)}
-  .ask button:disabled{
-    color:var(--mute); opacity:.4; cursor:default;
-  }
-  .ask button:disabled:hover{color:var(--mute)}
+  .ask input:focus,.ask input:focus-visible{outline:none}
   .ask-wait{
     display:none; width:12px; height:12px;
     border:1.5px solid var(--line);
     border-top-color:var(--ink);
     border-radius:50%;
   }
-  .ask button.busy{opacity:1}
-  .ask button.busy .ask-label{display:none}
-  .ask button.busy .ask-wait{
+  button.busy .ask-label{display:none}
+  button.busy .ask-wait{
     display:block;
     animation:ask-spin .7s linear infinite;
   }
@@ -111,20 +97,22 @@
     color:var(--mute); line-height:0; transition:color .2s;
   }
   .tog:hover{color:var(--ink)}
-  .tog svg{width:21px;height:21px;display:block;
+  .tog svg{width:24px;height:24px;display:block;
            stroke-width:1.1;vector-effect:non-scaling-stroke}
   .tog[aria-pressed=true]{color:var(--claret)}
   .tog[aria-pressed=true] svg{stroke-width:1.5}
   .tog#tStar[aria-pressed=true] svg{fill:var(--claret)}
   .tog#tFilter[aria-pressed=true]{color:var(--claret)}
-  .bar .n{color:var(--mute)}
+  .bar .n{color:var(--mute);font-size:12px}
   .bar .n b{color:var(--ink);font-weight:600}
   .reset{
     font-family:"Archivo",system-ui,sans-serif;font-size:10px;font-weight:500;
     text-transform:uppercase;letter-spacing:.18em;background:none;border:none;
     color:var(--claret);cursor:pointer;padding:0;
+    display:inline-flex;align-items:center;
   }
   .reset:hover{color:var(--ink)}
+  .reset.busy .ask-wait{border-top-color:var(--claret)}
   .reading{
     font-size:16px;font-style:italic;font-weight:300;color:var(--ink-soft);
     line-height:1.5;padding:0 0 6px;max-width:52ch;
@@ -135,6 +123,7 @@
   .filters-inner{padding:4px 0 8px}
   .f-sec{padding:22px 0;border-top:1px solid var(--hair)}
   .f-sec:first-child{border-top:none;padding-top:10px}
+  .f-actions{display:flex;align-items:center;gap:22px}
   .f-sec .caps{color:var(--mute);margin-bottom:14px}
   .chips{display:flex;flex-wrap:wrap;gap:8px}
   .chip{
@@ -262,7 +251,6 @@
 
     .caps{font-size:11.5px}
     .ask input{font-size:18px; padding:16px 0 10px}
-    .ask button{font-size:11px; padding:16px 0 10px 18px}
     .reading{font-size:17px}
     /* 300 is too thin to hold up at this size on a phone */
     .byline{font-size:16px; font-weight:400}
@@ -278,8 +266,9 @@
        text column despite the padding */
     .bar{padding:20px 0 14px}
     .bar .grp{gap:8px; margin-right:-7px}
+    .bar .n{font-size:13px}
     .tog{padding:7px}
-    .tog svg{width:24px;height:24px}
+    .tog svg{width:26px;height:26px}
     .acts{gap:10px; margin-left:-9px}
     .act{padding:9px}
     .act svg{width:20px;height:20px}
@@ -332,15 +321,6 @@
 </div>
 <div class="wrap">
 
-<div class="ask">
-  <input type="text" id="q" autocomplete="off"
-         placeholder="" aria-label="Ask">
-  <button id="go" disabled aria-label="Ask">
-    <span class="ask-label">Ask</span>
-    <span class="ask-wait" aria-hidden="true"></span>
-  </button>
-</div>
-
 <div class="bar">
   <div class="grp">
   <div class="n caps" id="count"></div>
@@ -360,8 +340,18 @@
 </div>
 <div id="filters" aria-hidden="true">
   <div class="filters-inner" id="filtersInner">
-    <div class="f-sec">
+    <div class="f-sec f-actions">
+      <button class="reset" id="fSearch">
+        <span class="ask-label">Search</span>
+        <span class="ask-wait" aria-hidden="true"></span>
+      </button>
       <button class="reset" id="fReset">Reset</button>
+    </div>
+    <div class="f-sec">
+      <div class="ask">
+        <input type="text" id="q" autocomplete="off"
+               placeholder="" aria-label="Search">
+      </div>
     </div>
     <div class="f-sec">
       <div class="caps">When</div>
@@ -590,6 +580,8 @@ function applyFilters(){
 function resetFilters(){
   filters=defaultFilters();
   subset=null;
+  lastAsked="";
+  document.getElementById("q").value="";
   syncFilterUI();
   applyFilters();
 }
@@ -825,14 +817,7 @@ const HINTS=[
   "Dance with contemporary music and choreography",
 ];
 let asking=false;
-
-function syncAsk(){
-  const empty=!document.getElementById("q").value.trim();
-  const btn=document.getElementById("go");
-  btn.disabled=asking||empty;
-  btn.classList.toggle("busy", asking);
-  btn.setAttribute("aria-busy", asking?"true":"false");
-}
+let lastAsked="";
 
 function startHints(){
   const q=document.getElementById("q");
@@ -888,26 +873,42 @@ function startHints(){
 async function ask(){
   const q=document.getElementById("q").value.trim();
   if(!q||asking){
-    if(!q){ subset=null; render(""); }
+    if(!q){ lastAsked=""; subset=null; render(""); }
     return;
   }
-  asking=true; syncAsk();
+  asking=true;
   try{
     const res=await fetch("/api/search?"+new URLSearchParams({q, limit:"60"}));
     if(!res.ok) throw new Error("search "+res.status);
     const data=await res.json();
     subset=data.ids||[];
+    lastAsked=q;
     render("");
   }catch(err){
     console.warn(err);
     subset=null;
     render("Search didn't respond.");
-  }finally{ asking=false; syncAsk(); }
+  }finally{ asking=false; }
 }
-document.getElementById("go").onclick=ask;
-document.getElementById("q").addEventListener("input", syncAsk);
+
+// The filters apply as you touch them, so this only has to catch a query the
+// reader typed but never submitted before shutting the panel.
+async function searchAndClose(){
+  const btn=document.getElementById("fSearch");
+  if(document.getElementById("q").value.trim()!==lastAsked){
+    btn.classList.add("busy");
+    btn.setAttribute("aria-busy","true");
+    try{ await ask(); }
+    finally{
+      btn.classList.remove("busy");
+      btn.setAttribute("aria-busy","false");
+    }
+  }
+  setFiltersOpen(false);
+}
+document.getElementById("fSearch").onclick=searchAndClose;
 document.getElementById("q").addEventListener("keydown",e=>{
-  if(e.key==="Enter") ask();
+  if(e.key==="Enter") searchAndClose();
 });
 
 function applyTodayStart(){
@@ -940,7 +941,6 @@ document.addEventListener("visibilitychange", ()=>{
   syncFilterUI();
   persist();
   render("");
-  syncAsk();
   startHints();
   scheduleDayRollover();
 })();
