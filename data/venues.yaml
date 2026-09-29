@@ -1174,6 +1174,8 @@ venues:
   name: "Regent's Park Open Air Theatre"
   location:
     area: "Regent's Park"
+  # Open air: dark from late September to May, when the listing is empty.
+  seasonal: true
   whats_on_url: "https://openairtheatre.com/whats-on/"
   fetch_method: static
   strategy: selectors

@@ -15,6 +15,8 @@ from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 
+import yaml
+
 from fetch import split_hook
 
 # Window used when building from the built-in curated seed (offline reproduction
@@ -415,8 +417,20 @@ def build(events, window, apply_window=True):
     return records, dropped, missing_desc
 
 
-def shrink_guard(new_records, compare_path, min_ratio=0.5):
+def seasonal_ids(venues_path):
+    """Venue ids flagged `seasonal: true`: houses that go dark between seasons."""
+    p = Path(venues_path) if venues_path else None
+    if not p or not p.exists():
+        return set()
+    cfg = yaml.safe_load(p.read_text()) or {}
+    return {v["id"] for v in cfg.get("venues") or [] if v.get("seasonal")}
+
+
+def shrink_guard(new_records, compare_path, min_ratio=0.5, seasonal=()):
     """Refuse to replace an extract that just lost most of its listings.
+
+    A venue in `seasonal` may drop to zero: an open-air house between summers
+    lists nothing, and that is not a broken scraper.
 
     Returns an error string, or None if the write is safe.
     """
@@ -434,7 +448,8 @@ def shrink_guard(new_records, compare_path, min_ratio=0.5):
                 f"{len(old)} ({compare_path}) — below {min_ratio:.0%} floor")
     old_venues = {e.get("venue_id") for e in old if e.get("venue_id")}
     new_counts = Counter(e.get("venue_id") for e in new_records)
-    vanished = sorted(v for v in old_venues if new_counts.get(v, 0) == 0)
+    vanished = sorted(v for v in old_venues
+                      if new_counts.get(v, 0) == 0 and v not in seasonal)
     if vanished:
         return ("refusing to write: previously listed venues now have 0 events: "
                 + ", ".join(vanished))
@@ -481,6 +496,8 @@ def main():
                                         "(defaults to the window start)")
     ap.add_argument("--compare", default="data/extracts/latest.json",
                     help="existing extract to guard against shrinking; empty to skip")
+    ap.add_argument("--venues", default="data/venues.yaml",
+                    help="registry; venues flagged seasonal may drop to zero")
     ap.add_argument("--force", action="store_true",
                     help="write even if the shrink guard would refuse")
     args = ap.parse_args()
@@ -498,7 +515,8 @@ def main():
     generated = args.generated or window[0].isoformat()
     out = Path(args.out)
     if not args.force:
-        reason = shrink_guard(records, args.compare)
+        reason = shrink_guard(records, args.compare,
+                              seasonal=seasonal_ids(args.venues))
         if reason:
             print(reason, file=sys.stderr)
             sys.exit(2)

@@ -374,6 +374,12 @@ produce an identical commit every week forever. A change also runs
 The dated snapshots are what make went/skipped history possible later.
 Don't prune them.
 
+`build_extract.py` refuses to write, and fails the job, if the extract shrinks
+below half or any venue that listed shows last time now has none. A venue
+that really goes dark between seasons (Regent's Park Open Air, October to
+May) is marked `seasonal: true` in `venues.yaml` and may drop to zero.
+Flag only venues whose empty listing you have seen with your own eyes.
+
 ---
 
 ## Distribution
