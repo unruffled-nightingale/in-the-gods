@@ -48,7 +48,7 @@ server/
 
 tests/
   test_*.py              dates, strategies, tags, synopsis, shrink guard
-                         143 tests; every trap below has one
+                         every trap below has one
 
 .github/workflows/
   fetch.yml              Monday 06:00 UTC
