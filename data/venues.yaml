@@ -84,11 +84,11 @@ venues:
   fetch_method: static
   strategy: selectors
   selectors:
-    show_card: ".prodlist__item"
-    title: ".prodlist__title"
-    dates: ".prodlist__date"
-    credits: ".prodlist__credits"
-    link: h3.prodlist__title a
+    show_card: ".listing-item"
+    title: ".card__heading h4"
+    dates: ".card__dates"
+    credits: ".page-header__creator-credits"
+    link: a.card__fill-link
 - id: kiln
   name: Kiln Theatre
   location:
@@ -467,14 +467,15 @@ venues:
   fetch_method: static
   strategy: selectors
   selectors:
-    show_card: ".folder:-soup-contains(\"What\") .collection"
+    show_card: ".folder:has(.folder-toggle:-soup-contains(\"Puppet Shows\", \"Other Events\")) .collection"
     title: a
     link: a
   detail_selectors:
     dates: "h3:nth-of-type(2)"
   notes: >
-    /whats-on redirects to the current Richmond production. The homepage What's On
-    folder lists every current show page. Dates live on the show page's second h3.
+    /whats-on redirects to the current Richmond production. The homepage nav folders
+    "Puppet Shows" and "Other Events" list every current show page (one "What's On"
+    folder until Sept 2026). Dates live on the show page's second h3.
     Homepage columns link out to a ticket vendor, so the nav folder is the listing that
     hops.
 - id: brixton-house
