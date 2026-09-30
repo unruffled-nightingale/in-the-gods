@@ -648,7 +648,11 @@ def full_title(soup):
 def stage2(show_url, use_cache=True, title=None, detail_sel=None):
     """Fetch a show page and pull a few paragraphs of synopsis."""
     try:
-        html = polite_get(show_url, use_cache)
+        # Render if the venue does, but never wait for its listing selector: a
+        # show page has no listing cards, so every hop sat out the full render
+        # timeout and then failed (The Place, Royal Court: ~53s a show).
+        html = polite_get(show_url, use_cache,
+                          render=bool(_render_opts.get()))
     except Exception as e:                                    # noqa: BLE001
         return {"detail_error": f"{type(e).__name__}: {e}"}
 

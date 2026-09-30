@@ -221,6 +221,12 @@ to tell JSON-LD from cards from a JS shell, then read the markup with
 Recording these because each one produced plausible-looking wrong output
 rather than an error.
 
+**Show pages must not wait for the listing selector.** Stage 2 ran inside
+the venue's render context and so waited for `render_wait` on every show page,
+which never has listing cards. Each hop sat out the full 45s+8s timeout, then
+failed, so The Place and Royal Court looked hung and lost every synopsis.
+Stage 2 now renders without a wait selector.
+
 **`render_wait` must match only the listing.** Hen & Chickens waited on
 `a.group`, which the logo also is. The wait returned before the events had
 loaded, so the venue reported ok with 0 shows, and the fail-loudly timeout
