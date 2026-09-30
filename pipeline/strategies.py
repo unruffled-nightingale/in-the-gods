@@ -312,7 +312,10 @@ def extract_sanity(venue, use_cache=True):
 
     api = (f"https://{project}.api.sanity.io/v{api_ver}/data/query/{dataset}"
            f"?query={quote(query)}")
-    payload = json.loads(polite_get(api, use_cache, max_age=LISTING_MAX_AGE))
+    # An API answers JSON. Rendering it in Chromium (the venue is js_rendered)
+    # wraps it in an HTML page that json.loads cannot read.
+    payload = json.loads(polite_get(api, use_cache, render=False,
+                                    max_age=LISTING_MAX_AGE))
     result = payload.get("result") or []
 
     pattern = venue.get("show_url_pattern") or (venue.get("whats_on_url", "").rstrip("/") + "/{slug}")
