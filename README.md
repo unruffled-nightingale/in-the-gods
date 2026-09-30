@@ -226,7 +226,8 @@ rather than an error.
 loaded, so the venue reported ok with 0 shows, and the fail-loudly timeout
 never fired because the selector had technically appeared. Wait on the card
 selector itself (`a.group[href^='/events/']`). Royal Ballet & Opera waits on
-a bare `h2` and may be the same bug waiting to happen.
+a bare `h2`; checked Sept 2026, every `h2` there is a card title, so it is safe
+until the page grows another heading.
 
 **Trailing slashes are per-venue.** Camden People's Theatre slugs take
 *no* trailing slash. Appending one broke all 23 of their links at once.
