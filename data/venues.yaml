@@ -1119,7 +1119,9 @@ venues:
   whats_on_url: "https://www.unrestrictedview.co.uk/events"
   fetch_method: rendered
   strategy: selectors
-  render_wait: a.group
+  # Wait for an event card, not bare a.group: the logo is one too, so that
+  # wait returned before the listing had loaded and scraped nothing.
+  render_wait: "a.group[href^='/events/']"
   selectors:
     show_card: "a.group[href^='/events/']"
     title: h3

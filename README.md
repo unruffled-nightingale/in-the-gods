@@ -221,6 +221,13 @@ to tell JSON-LD from cards from a JS shell, then read the markup with
 Recording these because each one produced plausible-looking wrong output
 rather than an error.
 
+**`render_wait` must match only the listing.** Hen & Chickens waited on
+`a.group`, which the logo also is. The wait returned before the events had
+loaded, so the venue reported ok with 0 shows, and the fail-loudly timeout
+never fired because the selector had technically appeared. Wait on the card
+selector itself (`a.group[href^='/events/']`). Royal Ballet & Opera waits on
+a bare `h2` and may be the same bug waiting to happen.
+
 **Trailing slashes are per-venue.** Camden People's Theatre slugs take
 *no* trailing slash. Appending one broke all 23 of their links at once.
 Wilton's and Arcola were inferred from observed URLs, never tested — same
