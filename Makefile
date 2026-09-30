@@ -3,6 +3,9 @@ IMAGE  := unrufflednightingale/$(NAME)
 TAG    := latest
 PORT   := 8080
 WEEKS  ?= 8
+# Comma-separated venue ids: crawl only INCLUDE, or everything but EXCLUDE.
+INCLUDE ?=
+EXCLUDE ?=
 PYTHON ?= $(firstword $(wildcard .venv/bin/python) python3)
 
 .PHONY: help recollect serve docker-build docker-run docker-stop docker-push kube-secret kube-apply kube-redeploy deploy
@@ -22,6 +25,8 @@ recollect:
 	$(PYTHON) pipeline/fetch.py \
 		--venues data/venues.yaml \
 		--weeks $(WEEKS) \
+		$(if $(INCLUDE),--include "$(INCLUDE)") \
+		$(if $(EXCLUDE),--exclude "$(EXCLUDE)") \
 		--out .cache/raw.json
 	$(PYTHON) pipeline/build_extract.py \
 		--raw .cache/raw.json \

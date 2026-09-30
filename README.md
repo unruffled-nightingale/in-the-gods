@@ -388,6 +388,12 @@ produce an identical commit every week forever. A change also runs
 The dated snapshots are what make went/skipped history possible later.
 Don't prune them.
 
+To crawl only some venues, or all but some, pass comma-separated ids:
+`make recollect EXCLUDE=donmar,royal-court` (or `INCLUDE=...`); the GitHub
+"Run workflow" form has the same two boxes. An unknown id is an error.
+Excluded venues are exempt from the empty-venue check below, and their shows
+drop out of the extract until they are crawled again.
+
 `build_extract.py` refuses to write, and fails the job, if the extract shrinks
 below half or any venue that listed shows last time now has none. A venue
 that really goes dark between seasons (Regent's Park Open Air, October to

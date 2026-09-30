@@ -465,6 +465,7 @@ def load_source(args):
             win = doc.get("window")
             window = ((date.fromisoformat(win[0]), date.fromisoformat(win[1]))
                       if win else None)
+            args.excluded = set(doc.get("excluded") or [])
             return doc.get("events", []), window
         print(f"note: {p} not found — building from the built-in seed instead",
               file=sys.stderr)
@@ -516,7 +517,8 @@ def main():
     out = Path(args.out)
     if not args.force:
         reason = shrink_guard(records, args.compare,
-                              seasonal=seasonal_ids(args.venues))
+                              seasonal=seasonal_ids(args.venues)
+                              | getattr(args, "excluded", set()))
         if reason:
             print(reason, file=sys.stderr)
             sys.exit(2)

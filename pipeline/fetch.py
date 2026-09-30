@@ -864,6 +864,22 @@ def run(cfg, weeks, only=None, use_cache=True):
     return all_events, report
 
 
+def select_ids(all_ids, include=None, exclude=None):
+    """Venue ids to crawl: `include` (or all), minus `exclude`.
+
+    Both are comma-separated strings. An unknown id is an error, so a typo
+    cannot quietly crawl everything or skip nothing.
+    """
+    def parse(s):
+        return [i.strip() for i in (s or "").split(",") if i.strip()]
+    inc, exc = parse(include), parse(exclude)
+    unknown = sorted(set(inc + exc) - set(all_ids))
+    if unknown:
+        raise SystemExit(f"unknown venue ids: {', '.join(unknown)}")
+    chosen = inc or list(all_ids)
+    return [i for i in chosen if i not in set(exc)]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("config", nargs="?",
@@ -872,7 +888,11 @@ def main():
                     help="path to venues.yaml (preferred; matches fetch.yml)")
     ap.add_argument("--weeks", type=int, default=8)
     ap.add_argument("--venue", help="restrict the run to a single venue id")
-    ap.add_argument("--ids", help="comma-separated venue ids")
+    ap.add_argument("--ids", "--include", dest="ids",
+                    help="comma-separated venue ids to crawl (default: all)")
+    ap.add_argument("--exclude", help="comma-separated venue ids to skip; they "
+                    "are recorded in the output so the extract's empty-venue "
+                    "check does not count them as broken")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--out", default=".cache/raw.json")
     args = ap.parse_args()
@@ -880,8 +900,11 @@ def main():
     venues_path = args.venues or args.config or "data/venues.yaml"
     cfg = yaml.safe_load(Path(venues_path).read_text())
     only = None
-    if args.ids:
-        only = [i.strip() for i in args.ids.split(",") if i.strip()]
+    excluded = []
+    if args.ids or args.exclude:
+        all_ids = [v["id"] for v in cfg["venues"]]
+        only = select_ids(all_ids, args.ids, args.exclude)
+        excluded = [i for i in all_ids if i not in set(only)] if args.exclude else []
     elif args.venue:
         only = args.venue
     try:
@@ -899,6 +922,7 @@ def main():
          "window": [today.isoformat(), horizon],
          "horizon_weeks": args.weeks,
          "count": len(events),
+         "excluded": excluded,
          "events": events}, indent=2))
 
     print(f"\n{'venue':<26}{'shows':<8}{'hops':<7}status")
